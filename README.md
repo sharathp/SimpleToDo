@@ -1,6 +1,6 @@
 # SimpleToDO Demo
 
-This is an Android demo application for managing ToDo items. See the [Cliffnotes](http://guides.thecodepath.com/android/RottenTomatoes-Networking-Tutorial) for reference.
+This is an Android demo application for managing ToDo items. See the [instructions](http://courses.codepath.com/snippets/intro_to_android/prework) for reference.
 
 Time spent: 2 hours spent in total
 
