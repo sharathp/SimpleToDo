@@ -1,0 +1,14 @@
+CREATE TABLE todo_item (
+    _id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    notes TEXT,
+    due_date INTEGER NOT NULL,
+    priority INTEGER AS Integer NOT NULL,
+    status INTEGER AS Integer NOT NULL
+);
+
+
+select_all_items:
+SELECT *
+FROM todo_item
+ORDER BY priority, name;
