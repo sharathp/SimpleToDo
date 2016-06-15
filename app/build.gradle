@@ -35,4 +35,7 @@ dependencies {
     // sql
     compile 'com.squareup.sqlbrite:sqlbrite:0.6.3'
 
+    // misc
+    compile "com.google.auto.value:auto-value:1.2"
+    apt 'com.google.auto.value:auto-value:1.2'
 }

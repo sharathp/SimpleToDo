@@ -1,0 +1,14 @@
+CREATE TABLE todo_item (
+    _id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    notes TEXT,
+    due_date INTEGER AS 'java.util.Calendar' NOT NULL,
+    priority TEXT AS 'com.codepath.simpletodo.db.models.Priority' NOT NULL,
+    status TEXT AS 'com.codepath.simpletodo.db.models.Status' NOT NULL
+);
+
+
+select_all:
+SELECT *
+FROM todo_item
+ORDER BY priority, name;
