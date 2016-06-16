@@ -32,6 +32,11 @@ dependencies {
     // TODO - remove this
     compile 'commons-io:commons-io:2.4'
 
+    // dagger
+    compile dependencies.dagger
+    apt dependencies.daggerCompiler
+    provided dependencies.javaxAnnotation
+
     // squidb
     compile dependencies.squidb
     compile dependencies.squidbAnnotation
