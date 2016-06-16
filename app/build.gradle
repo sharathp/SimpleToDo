@@ -37,6 +37,10 @@ dependencies {
     apt dependencies.daggerCompiler
     provided dependencies.javaxAnnotation
 
+    // butter knife
+    compile dependencies.butterKnife
+    apt dependencies.butterKnifeCompiler
+
     // squidb
     compile dependencies.squidb
     compile dependencies.squidbAnnotation
