@@ -1,4 +1,4 @@
-package com.codepath.simpletodo;
+package com.codepath.simpletodo.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,6 +9,8 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
+import com.codepath.simpletodo.R;
 
 public class EditItemActivity extends AppCompatActivity {
     public static final String EXTRA_ITEM_TEXT = "EditItemActivity.ITEM_TEXT";
