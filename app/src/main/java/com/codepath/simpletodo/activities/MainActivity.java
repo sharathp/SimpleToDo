@@ -62,6 +62,9 @@ public class MainActivity extends AppCompatActivity implements ToDoItemAdapter.T
 
         final Intent insertIntent = ToDoItemPersistenceService.createIntentToInsert(this, newItem);
         startService(insertIntent);
+
+        // reset
+        mNewItemEditText.setText("");
     }
 
     @Override
