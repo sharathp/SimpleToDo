@@ -1,6 +1,5 @@
 package com.codepath.simpletodo.di;
 
-import com.codepath.simpletodo.activities.EditItemActivity;
 import com.codepath.simpletodo.activities.MainActivity;
 import com.codepath.simpletodo.di.modules.ApplicationModule;
 import com.codepath.simpletodo.di.modules.DatabaseModule;
@@ -16,7 +15,5 @@ public interface ApplicationComponent {
 
     void inject(ToDoItemPersistenceService toDoItemPersistenceService);
 
-//    void inject(MainActivity mainActivity);
-
-//    void inject(EditItemActivity editItemActivity);
+    void inject(MainActivity mainActivity);
 }

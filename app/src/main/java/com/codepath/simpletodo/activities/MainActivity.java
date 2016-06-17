@@ -2,6 +2,8 @@ package com.codepath.simpletodo.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,16 +12,27 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.codepath.simpletodo.R;
+import com.codepath.simpletodo.SimpleToDoApplication;
 import com.codepath.simpletodo.adapters.ToDoItemAdapter;
 import com.codepath.simpletodo.models.ToDoItem;
+import com.codepath.simpletodo.repos.ToDoItemDAO;
 import com.codepath.simpletodo.services.ToDoItemPersistenceService;
+import com.yahoo.squidb.data.SquidCursor;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MainActivity extends AppCompatActivity implements ToDoItemAdapter.ToDoItemClickListener {
+public class MainActivity extends AppCompatActivity implements ToDoItemAdapter.ToDoItemClickListener,
+        LoaderManager.LoaderCallbacks<SquidCursor<ToDoItem>> {
+
     private static final int REQUEST_CODE_EDIT_ACTIVITY = 1;
+    private static final int LOADER_ID_TODO_ITEMS = 0;
+
+    @Inject
+    ToDoItemDAO mToDoItemDAO;
 
     @BindView(R.id.recycler_items)
     RecyclerView mItemsRecyclerView;
@@ -33,16 +46,12 @@ public class MainActivity extends AppCompatActivity implements ToDoItemAdapter.T
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         ButterKnife.bind(this);
+        SimpleToDoApplication.from(this).getComponent().inject(this);
 
         initViews();
-    }
-
-    private void initViews() {
-        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        mToDoItemAdapter = new ToDoItemAdapter(this);
-        mItemsRecyclerView.setLayoutManager(linearLayoutManager);
-        mItemsRecyclerView.setAdapter(mToDoItemAdapter);
+        getSupportLoaderManager().initLoader(LOADER_ID_TODO_ITEMS, null, this);
     }
 
     @OnClick(R.id.btn_add_item)
@@ -81,5 +90,27 @@ public class MainActivity extends AppCompatActivity implements ToDoItemAdapter.T
     public void onLongClick(final ToDoItem toDoItem) {
         final Intent deleteIntent = ToDoItemPersistenceService.createIntentToDelete(this, toDoItem.getId());
         startService(deleteIntent);
+    }
+
+    @Override
+    public Loader<SquidCursor<ToDoItem>> onCreateLoader(final int id, final Bundle args) {
+        return mToDoItemDAO.getAllToDoItems();
+    }
+
+    @Override
+    public void onLoadFinished(final Loader<SquidCursor<ToDoItem>> loader, final SquidCursor<ToDoItem> data) {
+        mToDoItemAdapter.swapCursor(data);
+    }
+
+    @Override
+    public void onLoaderReset(final Loader<SquidCursor<ToDoItem>> loader) {
+        mToDoItemAdapter.swapCursor(null);
+    }
+
+    private void initViews() {
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        mToDoItemAdapter = new ToDoItemAdapter(this);
+        mItemsRecyclerView.setLayoutManager(linearLayoutManager);
+        mItemsRecyclerView.setAdapter(mToDoItemAdapter);
     }
 }

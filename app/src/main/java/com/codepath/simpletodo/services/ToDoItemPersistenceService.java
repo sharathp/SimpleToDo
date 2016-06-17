@@ -58,7 +58,7 @@ public class ToDoItemPersistenceService extends IntentService {
 
     @Override
     protected void onHandleIntent(final Intent intent) {
-        final int action = intent.getIntExtra(EXTRA_TODO_ACTION, -1);
+        @Action final int action = intent.getIntExtra(EXTRA_TODO_ACTION, -1);
 
         switch (action) {
             case ACTION_INSERT: {

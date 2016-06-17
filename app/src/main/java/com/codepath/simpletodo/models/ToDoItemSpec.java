@@ -15,12 +15,12 @@ public class ToDoItemSpec {
 
     public String notes;
 
-    @ColumnSpec(constraints = "NOT NULL")
+//    @ColumnSpec(constraints = "NOT NULL")
     public long dueDate;
 
-    @ColumnSpec(constraints = "NOT NULL")
+//    @ColumnSpec(constraints = "NOT NULL")
     private Priority priority;
 
-    @ColumnSpec(constraints = "NOT NULL")
+//    @ColumnSpec(constraints = "NOT NULL")
     private Status status;
 }
