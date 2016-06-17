@@ -11,66 +11,68 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.codepath.simpletodo.R;
+import com.codepath.simpletodo.models.ToDoItem;
+import com.codepath.simpletodo.services.ToDoItemPersistenceService;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class EditItemActivity extends AppCompatActivity {
-    public static final String EXTRA_ITEM_TEXT = "EditItemActivity.ITEM_TEXT";
-    public static final String EXTRA_ITEM_POSITION = "EditItemActivity.ITEM_POSITION";
+    public static final String EXTRA_ITEM = "EditItemActivity.ITEM";
 
-    public static final int INVALID_ITEM_POSITION = -1;
+    @BindView(R.id.edit_item_name)
+    EditText mItemNameEditText;
 
-    private EditText etItem;
-    private Button btnSaveItem;
-    private int itemPosition;
+    @BindView(R.id.btn_save_item)
+    Button mSaveButton;
 
-    public static Intent createIntent(Context context, String text, int position) {
-        Intent intent = new Intent(context, EditItemActivity.class);
-        intent.putExtra(EXTRA_ITEM_TEXT, text);
-        intent.putExtra(EXTRA_ITEM_POSITION, position);
+    private ToDoItem mToDoItem;
+
+    public static Intent createIntent(final Context context, final ToDoItem toDoItem) {
+        final Intent intent = new Intent(context, EditItemActivity.class);
+        intent.putExtra(EXTRA_ITEM, toDoItem);
         return intent;
     }
 
-    public static String getText(Intent data) {
-        return data.getStringExtra(EXTRA_ITEM_TEXT);
-    }
-
-    public static int getPosition(Intent data) {
-        return data.getIntExtra(EXTRA_ITEM_POSITION, INVALID_ITEM_POSITION);
+    public static ToDoItem getItem(final Intent data) {
+        return data.getParcelableExtra(EXTRA_ITEM);
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_item);
+        mToDoItem = getIntent().getParcelableExtra(EXTRA_ITEM);
 
-        etItem = (EditText) findViewById(R.id.etExistingItem);
-        btnSaveItem = (Button) findViewById(R.id.btnSaveItem);
+        ButterKnife.bind(this);
+        initViews();
+    }
 
-        itemPosition = getIntent().getIntExtra(EXTRA_ITEM_POSITION, INVALID_ITEM_POSITION);
-        String text = getIntent().getStringExtra(EXTRA_ITEM_TEXT);
-        etItem.setText(text);
-        etItem.setSelection(etItem.length());
-        etItem.addTextChangedListener(new TextWatcher() {
+    private void initViews() {
+        mItemNameEditText.setText(mToDoItem.getName());
+        mItemNameEditText.setSelection(mToDoItem.getName().length());
+        mItemNameEditText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            public void beforeTextChanged(final CharSequence s, final int start, final int count, final int after) {
                 // no-op
             }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            public void onTextChanged(final CharSequence s, final int start, final int before, final int count) {
                 // no-op
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
+            public void afterTextChanged(final Editable s) {
                 if (s.toString().trim().isEmpty()) {
-                    btnSaveItem.setEnabled(false);
+                    mSaveButton.setEnabled(false);
                 } else {
-                    btnSaveItem.setEnabled(true);
+                    mSaveButton.setEnabled(true);
                 }
             }
         });
 
-        btnSaveItem.setOnClickListener(new View.OnClickListener() {
+        mSaveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onSaveItem();
@@ -79,12 +81,14 @@ public class EditItemActivity extends AppCompatActivity {
     }
 
     private void onSaveItem() {
-        String text = etItem.getText().toString();
+        final String updatedName = mItemNameEditText.getText().toString();
+        mToDoItem.setName(updatedName);
 
-        Intent data = new Intent();
-        data.putExtra(EXTRA_ITEM_TEXT, text);
-        data.putExtra(EXTRA_ITEM_POSITION, itemPosition);
+        final Intent updateIntent = ToDoItemPersistenceService.createIntentToUpdate(this, mToDoItem);
+        startService(updateIntent);
 
+        final Intent data = new Intent();
+        data.putExtra(EXTRA_ITEM, mToDoItem);
         setResult(RESULT_OK, data);
         finish();
     }

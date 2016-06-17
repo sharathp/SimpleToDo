@@ -11,25 +11,25 @@
     tools:context=".activities.EditItemActivity">
 
     <TextView
-        android:id="@+id/tvLabel"
+        android:id="@+id/text_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Edit Item Below:"
         android:textSize="20sp"/>
 
     <EditText
+        android:id="@+id/edit_item_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/etExistingItem"
-        android:layout_alignLeft="@+id/tvLabel"
-        android:layout_below="@+id/tvLabel"/>
+        android:layout_alignLeft="@+id/text_label"
+        android:layout_below="@+id/text_label"/>
 
     <Button
+        android:id="@+id/btn_save_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Save"
-        android:id="@+id/btnSaveItem"
-        android:layout_alignLeft="@+id/etExistingItem"
-        android:layout_below="@+id/etExistingItem"/>
+        android:layout_alignLeft="@+id/edit_item_name"
+        android:layout_below="@+id/edit_item_name"/>
 
 </RelativeLayout>

@@ -1,71 +1,62 @@
 package com.codepath.simpletodo.activities;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.codepath.simpletodo.R;
+import com.codepath.simpletodo.adapters.ToDoItemAdapter;
+import com.codepath.simpletodo.models.ToDoItem;
+import com.codepath.simpletodo.services.ToDoItemPersistenceService;
 
-import org.apache.commons.io.FileUtils;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ToDoItemAdapter.ToDoItemClickListener {
     private static final int REQUEST_CODE_EDIT_ACTIVITY = 1;
 
-    ArrayList<String> items;
-    ArrayAdapter<String> itemsAdapter;
-    ListView lvItems;
+    @BindView(R.id.recycler_items)
+    RecyclerView mItemsRecyclerView;
+
+    @BindView(R.id.edit_new_item)
+    EditText mNewItemEditText;
+
+    private ToDoItemAdapter mToDoItemAdapter;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        lvItems = (ListView) findViewById(R.id.lvItems);
-        readItems();
-        itemsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, items);
-        lvItems.setAdapter(itemsAdapter);
-        setupListViewListener();
+        ButterKnife.bind(this);
+
+        initViews();
     }
 
-    public void onAddItem(View view) {
-        EditText etNewItem = (EditText) findViewById(R.id.etNewItem);
-        String itemText = etNewItem.getText().toString();
-        itemsAdapter.add(itemText);
-        etNewItem.setText("");
-        writeItems();
+    private void initViews() {
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        mToDoItemAdapter = new ToDoItemAdapter(this);
+        mItemsRecyclerView.setLayoutManager(linearLayoutManager);
+        mItemsRecyclerView.setAdapter(mToDoItemAdapter);
     }
 
-    private void setupListViewListener() {
-        lvItems.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                items.remove(position);
-                itemsAdapter.notifyDataSetChanged();
-                writeItems();
-                return true;
-            }
-        });
+    @OnClick(R.id.btn_add_item)
+    void onAddItem(final View view) {
+        final String name = mNewItemEditText.getText().toString();
+        final ToDoItem newItem = new ToDoItem();
+        newItem.setName(name);
 
-        lvItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = EditItemActivity.createIntent(MainActivity.this, items.get(position), position);
-                startActivityForResult(intent, REQUEST_CODE_EDIT_ACTIVITY);
-            }
-        });
+        final Intent insertIntent = ToDoItemPersistenceService.createIntentToInsert(this, newItem);
+        startService(insertIntent);
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (REQUEST_CODE_EDIT_ACTIVITY != requestCode) {
@@ -73,35 +64,22 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (RESULT_OK == resultCode) {
-            String text = EditItemActivity.getText(data);
-            int position = EditItemActivity.getPosition(data);
-
-            if (text != null && EditItemActivity.INVALID_ITEM_POSITION != position) {
-                items.set(position, text);
-                itemsAdapter.notifyDataSetChanged();
-                writeItems();
-                Toast.makeText(MainActivity.this, text, Toast.LENGTH_SHORT).show();
+            final ToDoItem toDoItem = EditItemActivity.getItem(data);
+            if (toDoItem != null) {
+                Toast.makeText(MainActivity.this, toDoItem.getName(), Toast.LENGTH_SHORT).show();
             }
         }
     }
 
-    private void readItems() {
-        File filesDir = getFilesDir();
-        File todoFile = new File(filesDir, "todo.txt");
-        try {
-            items = new ArrayList<>(FileUtils.readLines(todoFile));
-        } catch(IOException e) {
-            items = new ArrayList<>();
-        }
+    @Override
+    public void onClick(final ToDoItem toDoItem) {
+        final Intent intent = EditItemActivity.createIntent(MainActivity.this, toDoItem);
+        startActivityForResult(intent, REQUEST_CODE_EDIT_ACTIVITY);
     }
 
-    private void writeItems() {
-        File filesDir = getFilesDir();
-        File todoFile = new File(filesDir, "todo.txt");
-        try {
-            FileUtils.writeLines(todoFile, items);
-        } catch(IOException e) {
-            e.printStackTrace();
-        }
+    @Override
+    public void onLongClick(final ToDoItem toDoItem) {
+        final Intent deleteIntent = ToDoItemPersistenceService.createIntentToDelete(this, toDoItem.getId());
+        startService(deleteIntent);
     }
 }
