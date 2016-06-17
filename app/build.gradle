@@ -29,10 +29,9 @@ dependencies {
     testCompile dependencies.junit
     compile dependencies.appCompat
 
-    // TODO - remove this
-    compile 'commons-io:commons-io:2.4'
-
     // dagger
+    // this is to fix dagger 2.2 issue - https://github.com/rharter/auto-value-gson/issues/43
+    apt dependencies.javaPoet
     compile dependencies.dagger
     apt dependencies.daggerCompiler
     provided dependencies.javaxAnnotation

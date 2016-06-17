@@ -6,6 +6,7 @@ ext {
     stethoVersion = '1.3.1'
     junitVersion = '4.12'
     butterKnifeVersion = '8.1.0'
+    javaPoetVersion = '1.7.0'
 
     dependencies = [
             appCompat : "com.android.support:appcompat-v7:$supportLibraryVersion",
@@ -27,6 +28,7 @@ ext {
 
             javaxAnnotation: "javax.annotation:jsr250-api:$javaxAnnotationVersion",
             stetho: "com.facebook.stetho:stetho:$stethoVersion",
+            javaPoet: "com.squareup:javapoet:$javaPoetVersion",
 
             junit: "junit:junit:$junitVersion"
     ]
