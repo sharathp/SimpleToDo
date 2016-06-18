@@ -42,7 +42,7 @@ public class ToDoItemView extends LinearLayout {
     }
 
     public void init() {
-        inflate(getContext(), R.layout.item_todo_item,this);
+        inflate(getContext(), R.layout.merge_item_todo_item,this);
         ButterKnife.bind(this);
     }
 

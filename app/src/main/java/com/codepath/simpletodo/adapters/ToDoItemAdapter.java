@@ -1,8 +1,10 @@
 package com.codepath.simpletodo.adapters;
 
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.codepath.simpletodo.R;
 import com.codepath.simpletodo.models.ToDoItem;
 import com.codepath.simpletodo.views.ToDoItemView;
 import com.yahoo.squidb.recyclerview.SquidRecyclerAdapter;
@@ -26,7 +28,8 @@ public class ToDoItemAdapter extends SquidRecyclerAdapter<ToDoItem, ToDoItemAdap
 
     @Override
     public ToDoItemHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
-        final ToDoItemView view = new ToDoItemView(parent.getContext());
+        final LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        final View view = inflater.inflate(R.layout.item_todo_item, parent, false);
         return new ToDoItemHolder(view, mToDoItemClickListener);
     }
 

@@ -17,6 +17,7 @@ import com.codepath.simpletodo.adapters.ToDoItemAdapter;
 import com.codepath.simpletodo.models.ToDoItem;
 import com.codepath.simpletodo.repos.ToDoItemDAO;
 import com.codepath.simpletodo.services.ToDoItemPersistenceService;
+import com.codepath.simpletodo.views.DividerItemDecoration;
 import com.yahoo.squidb.data.SquidCursor;
 
 import javax.inject.Inject;
@@ -115,5 +116,7 @@ public class MainActivity extends AppCompatActivity implements ToDoItemAdapter.T
         mToDoItemAdapter = new ToDoItemAdapter(this);
         mItemsRecyclerView.setLayoutManager(linearLayoutManager);
         mItemsRecyclerView.setAdapter(mToDoItemAdapter);
+        mItemsRecyclerView.setHasFixedSize(true);
+        mItemsRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
     }
 }
