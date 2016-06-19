@@ -16,7 +16,6 @@ import com.codepath.simpletodo.SimpleToDoApplication;
 import com.codepath.simpletodo.adapters.ToDoItemAdapter;
 import com.codepath.simpletodo.models.ToDoItem;
 import com.codepath.simpletodo.repos.ToDoItemDAO;
-import com.codepath.simpletodo.services.ToDoItemPersistenceService;
 import com.codepath.simpletodo.views.DividerItemDecoration;
 import com.yahoo.squidb.data.SquidCursor;
 
@@ -79,12 +78,6 @@ public class MainActivity extends AppCompatActivity implements ToDoItemAdapter.T
     public void onClick(final ToDoItem toDoItem) {
         final Intent intent = EditItemActivity.createIntent(MainActivity.this, toDoItem);
         startActivityForResult(intent, REQUEST_CODE_EDIT_ACTIVITY);
-    }
-
-    @Override
-    public void onLongClick(final ToDoItem toDoItem) {
-        final Intent deleteIntent = ToDoItemPersistenceService.createIntentToDelete(this, toDoItem.getId());
-        startService(deleteIntent);
     }
 
     @Override

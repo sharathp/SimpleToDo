@@ -23,6 +23,10 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|right"
         android:layout_margin="16dp"
-        android:src="@drawable/ic_add_white"/>
+        app:elevation="@dimen/floating_button_elevation"
+        app:borderWidth="0dp"
+        android:text="@string/label_item_create"
+        android:contentDescription="@string/label_item_create"
+        android:src="@drawable/ic_add"/>
 
 </android.support.design.widget.CoordinatorLayout>

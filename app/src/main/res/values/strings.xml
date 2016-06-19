@@ -7,4 +7,6 @@
     <string name="label_item_priority">Priority</string>
     <string name="label_item_save">Save</string>
     <string name="label_item_complete">Completed</string>
+    <string name="action_delete">Delete</string>
+    <string name="label_item_create">New Item</string>
 </resources>

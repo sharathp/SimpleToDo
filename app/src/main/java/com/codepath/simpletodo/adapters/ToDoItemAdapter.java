@@ -47,17 +47,6 @@ public class ToDoItemAdapter extends SquidRecyclerAdapter<ToDoItem, ToDoItemAdap
             }
         };
 
-        private View.OnLongClickListener mOnLongClickListener = new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(final View v) {
-                final ToDoItemClickListener toDoItemClickListener = mToDoItemClickListener.get();
-                if (toDoItemClickListener != null) {
-                    toDoItemClickListener.onLongClick(item);
-                }
-                return true;
-            }
-        };
-
         public ToDoItemHolder(final View itemView, final WeakReference<ToDoItemClickListener> toDoItemClickListener) {
             // empty model as recommended in SquidViewHolder documentation..
             super(itemView, new ToDoItem());
@@ -73,7 +62,5 @@ public class ToDoItemAdapter extends SquidRecyclerAdapter<ToDoItem, ToDoItemAdap
 
     public interface ToDoItemClickListener {
         void onClick(ToDoItem toDoItem);
-
-        void onLongClick(ToDoItem toDoItem);
     }
 }

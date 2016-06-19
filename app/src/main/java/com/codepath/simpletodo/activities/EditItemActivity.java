@@ -5,15 +5,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.SeekBar;
@@ -34,7 +37,7 @@ import butterknife.ButterKnife;
 
 public class EditItemActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
     public static final String EXTRA_ITEM = "EditItemActivity.ITEM";
-    private static final String PATTERN_DATE = "yyyy-MMM-dd";
+    private static final String PATTERN_DATE = "dd-MMM-yyyy";
 
     @BindView(R.id.tie_item_name)
     TextInputEditText mItemNameEditText;
@@ -51,8 +54,8 @@ public class EditItemActivity extends AppCompatActivity implements DatePickerDia
     @BindView(R.id.sb_item_priority)
     SeekBar mPrioritySeekBar;
 
-    @BindView(R.id.btn_save_item)
-    Button mSaveButton;
+    @BindView(R.id.fab_save)
+    FloatingActionButton mSaveButton;
 
     @BindView(R.id.cb_item_complete)
     CheckBox mCompletedCheckbox;
@@ -77,6 +80,8 @@ public class EditItemActivity extends AppCompatActivity implements DatePickerDia
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_item);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
         mToDoItem = getIntent().getParcelableExtra(EXTRA_ITEM);
 
         ButterKnife.bind(this);
@@ -91,6 +96,40 @@ public class EditItemActivity extends AppCompatActivity implements DatePickerDia
             // default to today
             setDate(getToday());
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(final Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_edit, menu);
+
+        // not a new item, so, hide delete
+        if (! mToDoItem.isSaved()) {
+            menu.findItem(R.id.action_delete).setVisible(false);
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(final MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home: {
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+            }
+            case R.id.action_delete: {
+                deleteItem();
+                return true;
+            }
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onDateSet(final DatePicker view, final int year, final int month, final int day) {
+        final GregorianCalendar calendar = new GregorianCalendar(year, month, day);
+        setDate(new Date(calendar.getTimeInMillis()));
     }
 
     private void bindViews() {
@@ -211,7 +250,7 @@ public class EditItemActivity extends AppCompatActivity implements DatePickerDia
         mToDoItem.setName(updatedName.trim());
         mToDoItem.setPriority(Priority.getPriorityByOrder(mPrioritySeekBar.getProgress()));
 
-        final String updatedDescription = mItemNameEditText.getText().toString();
+        final String updatedDescription = mItemDescEditText.getText().toString();
         if (! TextUtils.isEmpty(updatedDescription)) {
             mToDoItem.setDescription(updatedDescription);
         }
@@ -242,9 +281,9 @@ public class EditItemActivity extends AppCompatActivity implements DatePickerDia
         return sdf.format(date);
     }
 
-    @Override
-    public void onDateSet(final DatePicker view, final int year, final int month, final int day) {
-        final GregorianCalendar calendar = new GregorianCalendar(year, month, day);
-        setDate(new Date(calendar.getTimeInMillis()));
+    private void deleteItem() {
+        final Intent deleteIntent = ToDoItemPersistenceService.createIntentToDelete(this, mToDoItem.getId());
+        startService(deleteIntent);
+        this.finish();
     }
 }
