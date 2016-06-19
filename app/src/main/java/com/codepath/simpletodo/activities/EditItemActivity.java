@@ -1,5 +1,6 @@
 package com.codepath.simpletodo.activities;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PorterDuff;
@@ -14,10 +15,11 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.SeekBar;
-import android.widget.Toast;
 
 import com.codepath.simpletodo.R;
+import com.codepath.simpletodo.fragments.DatePickerFragment;
 import com.codepath.simpletodo.models.Priority;
 import com.codepath.simpletodo.models.ToDoItem;
 import com.codepath.simpletodo.services.ToDoItemPersistenceService;
@@ -25,11 +27,12 @@ import com.codepath.simpletodo.views.HideKeyboardEditTextFocusChangeListener;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.util.GregorianCalendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class EditItemActivity extends AppCompatActivity {
+public class EditItemActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
     public static final String EXTRA_ITEM = "EditItemActivity.ITEM";
     private static final String PATTERN_DATE = "yyyy-MMM-dd";
 
@@ -105,6 +108,7 @@ public class EditItemActivity extends AppCompatActivity {
     }
 
     private void initViews() {
+        mItemNameEditText.setOnFocusChangeListener(mHideKeyboardEditTextFocusChangeListener);
         mItemNameEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(final CharSequence s, final int start, final int count, final int after) {
@@ -123,7 +127,6 @@ public class EditItemActivity extends AppCompatActivity {
                 }
             }
         });
-        mItemNameEditText.setOnFocusChangeListener(mHideKeyboardEditTextFocusChangeListener);
 
         mItemDescEditText.setOnFocusChangeListener(mHideKeyboardEditTextFocusChangeListener);
 
@@ -147,11 +150,21 @@ public class EditItemActivity extends AppCompatActivity {
         });
 
         mItemDueDateEditText.setInputType(InputType.TYPE_NULL);
+
+        // this is required once the focus is obtained
+        mItemDueDateEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showCalendar();
+            }
+        });
+
+        // this is required the first time focus is obtained
         mItemDueDateEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(final View v, final boolean hasFocus) {
                 if (hasFocus) {
-                    Toast.makeText(EditItemActivity.this, "Show Calendar", Toast.LENGTH_SHORT).show();
+                    showCalendar();
                 }
             }
         });
@@ -162,6 +175,11 @@ public class EditItemActivity extends AppCompatActivity {
                 onSaveItem();
             }
         });
+    }
+
+    private void showCalendar() {
+        final DatePickerFragment newFragment = new DatePickerFragment();
+        newFragment.show(getSupportFragmentManager(), "datePicker");
     }
 
     private void setPrioritySeekBarColor(final SeekBar seekBar, final int progress) {
@@ -222,5 +240,11 @@ public class EditItemActivity extends AppCompatActivity {
     private String formatDate(final Date date) {
         final SimpleDateFormat sdf = new SimpleDateFormat(PATTERN_DATE);
         return sdf.format(date);
+    }
+
+    @Override
+    public void onDateSet(final DatePicker view, final int year, final int month, final int day) {
+        final GregorianCalendar calendar = new GregorianCalendar(year, month, day);
+        setDate(new Date(calendar.getTimeInMillis()));
     }
 }
