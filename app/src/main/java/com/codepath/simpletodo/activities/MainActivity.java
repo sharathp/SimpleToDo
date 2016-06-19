@@ -2,13 +2,13 @@ package com.codepath.simpletodo.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import com.codepath.simpletodo.R;
@@ -24,7 +24,6 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity implements ToDoItemAdapter.ToDoItemClickListener,
         LoaderManager.LoaderCallbacks<SquidCursor<ToDoItem>> {
@@ -35,11 +34,11 @@ public class MainActivity extends AppCompatActivity implements ToDoItemAdapter.T
     @Inject
     ToDoItemDAO mToDoItemDAO;
 
-    @BindView(R.id.recycler_items)
+    @BindView(R.id.rv_items)
     RecyclerView mItemsRecyclerView;
 
-    @BindView(R.id.edit_new_item)
-    EditText mNewItemEditText;
+    @BindView(R.id.fab_new)
+    FloatingActionButton mFabNewItem;
 
     private ToDoItemAdapter mToDoItemAdapter;
 
@@ -55,17 +54,9 @@ public class MainActivity extends AppCompatActivity implements ToDoItemAdapter.T
         getSupportLoaderManager().initLoader(LOADER_ID_TODO_ITEMS, null, this);
     }
 
-    @OnClick(R.id.btn_add_item)
-    void onAddItem(final View view) {
-        final String name = mNewItemEditText.getText().toString();
-        final ToDoItem newItem = new ToDoItem();
-        newItem.setName(name);
-
-        final Intent insertIntent = ToDoItemPersistenceService.createIntentToInsert(this, newItem);
-        startService(insertIntent);
-
-        // reset
-        mNewItemEditText.setText("");
+    private void createNewItem() {
+        final Intent intent = EditItemActivity.createIntent(MainActivity.this, null);
+        startActivityForResult(intent, REQUEST_CODE_EDIT_ACTIVITY);
     }
 
     @Override
@@ -118,5 +109,12 @@ public class MainActivity extends AppCompatActivity implements ToDoItemAdapter.T
         mItemsRecyclerView.setAdapter(mToDoItemAdapter);
         mItemsRecyclerView.setHasFixedSize(true);
         mItemsRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
+
+        mFabNewItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                createNewItem();
+            }
+        });
     }
 }

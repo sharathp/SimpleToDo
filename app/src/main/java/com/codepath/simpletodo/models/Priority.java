@@ -1,17 +1,26 @@
 package com.codepath.simpletodo.models;
 
 public enum Priority {
-    HIGH(0),
+    HIGH(2),
     MEDIUM(1),
-    LOW(2);
+    LOW(0);
 
     private final int mOrder;
 
-    Priority(int order) {
+    Priority(final int order) {
         mOrder = order;
     }
 
     public int getOrder() {
         return mOrder;
+    }
+
+    public static Priority getPriorityByOrder(final int order) {
+        for (Priority current: Priority.values()) {
+            if (order == current.getOrder()) {
+                return current;
+            }
+        }
+        return null;
     }
 }

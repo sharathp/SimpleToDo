@@ -5,15 +5,19 @@ import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatSpinner;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.SeekBar;
 
 import com.codepath.simpletodo.R;
+import com.codepath.simpletodo.models.Priority;
 import com.codepath.simpletodo.models.ToDoItem;
 import com.codepath.simpletodo.services.ToDoItemPersistenceService;
 
@@ -25,6 +29,9 @@ public class EditItemActivity extends AppCompatActivity {
 
     @BindView(R.id.tie_item_name)
     TextInputEditText mItemNameEditText;
+
+    @BindView(R.id.til_item_name)
+    TextInputLayout mItemNameTextInputLayout;
 
     @BindView(R.id.tie_item_description)
     TextInputEditText mItemDescEditText;
@@ -38,11 +45,16 @@ public class EditItemActivity extends AppCompatActivity {
     @BindView(R.id.btn_save_item)
     Button mSaveButton;
 
+    @BindView(R.id.cb_item_complete)
+    CheckBox mCompletedCheckbox;
+
     private ToDoItem mToDoItem;
 
     public static Intent createIntent(final Context context, final ToDoItem toDoItem) {
         final Intent intent = new Intent(context, EditItemActivity.class);
-        intent.putExtra(EXTRA_ITEM, toDoItem);
+        if (toDoItem != null) {
+            intent.putExtra(EXTRA_ITEM, toDoItem);
+        }
         return intent;
     }
 
@@ -58,10 +70,27 @@ public class EditItemActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
         initViews();
+
+        if (mToDoItem != null) {
+            bindViews();
+        } else {
+            mToDoItem = new ToDoItem();
+        }
+    }
+
+    private void bindViews() {
+        mItemNameEditText.setText(mToDoItem.getName());
+        if (! TextUtils.isEmpty(mToDoItem.getDescription())) {
+            mItemDescEditText.setText(mToDoItem.getDescription());
+        }
+        mPrioritySeekBar.setProgress(mToDoItem.getPriority().getOrder());
+
+        // TODO - bind date
+
+        mCompletedCheckbox.setChecked(mToDoItem.isCompleted());
     }
 
     private void initViews() {
-        mItemNameEditText.setText(mToDoItem.getName());
         mItemNameEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(final CharSequence s, final int start, final int count, final int after) {
@@ -75,10 +104,8 @@ public class EditItemActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(final Editable s) {
-                if (s.toString().trim().isEmpty()) {
-                    mSaveButton.setEnabled(false);
-                } else {
-                    mSaveButton.setEnabled(true);
+                if (mItemNameTextInputLayout.isErrorEnabled() && !TextUtils.isEmpty(s.toString())) {
+                    mItemNameTextInputLayout.setErrorEnabled(false);
                 }
             }
         });
@@ -102,23 +129,6 @@ public class EditItemActivity extends AppCompatActivity {
                 // no-op
             }
         });
-
-
-
-//        mDueDateSpinner.post(new Runnable() {
-//            @Override
-//            public void run() {
-//                // set the width of spinners to be the same
-//                final int dueDateSpinnerWidth = mDueDateSpinner.getWidth();
-//                final int prioritySpinnerWidth = mPrioritySpinner.getWidth();
-//
-//                if (dueDateSpinnerWidth > prioritySpinnerWidth) {
-//                    mPrioritySpinner.getLayoutParams().width = dueDateSpinnerWidth;
-//                } else {
-//                    mDueDateSpinner.getLayoutParams().width = prioritySpinnerWidth;
-//                }
-//            }
-//        });
 
         mSaveButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -149,7 +159,23 @@ public class EditItemActivity extends AppCompatActivity {
 
     private void onSaveItem() {
         final String updatedName = mItemNameEditText.getText().toString();
-        mToDoItem.setName(updatedName);
+        if (TextUtils.isEmpty(updatedName)) {
+            mItemNameTextInputLayout.setError("Name is required");
+            return;
+        }
+
+        mToDoItem.setName(updatedName.trim());
+        mToDoItem.setPriority(Priority.getPriorityByOrder(mPrioritySeekBar.getProgress()));
+
+        final String updatedDescription = mItemNameEditText.getText().toString();
+        if (! TextUtils.isEmpty(updatedDescription)) {
+            mToDoItem.setDescription(updatedDescription);
+        }
+
+        // TODO - set the date based on the selected date
+        mToDoItem.setDueDate(1L);
+
+        mToDoItem.setIsCompleted(mCompletedCheckbox.isChecked());
 
         final Intent updateIntent = ToDoItemPersistenceService.createIntentToUpdate(this, mToDoItem);
         startService(updateIntent);
