@@ -8,12 +8,6 @@
     <string name="label_todo_item_save">Save</string>
     <string name="label_todo_item_complete">Completed</string>
 
-    <string-array name="priority_list">
-        <item>HIGH</item>
-        <item>MEDIUM</item>
-        <item>LOW</item>
-    </string-array>
-
     <string-array name="duedate_list">
         <item>TODAY</item>
         <item>TOMORROW</item>
