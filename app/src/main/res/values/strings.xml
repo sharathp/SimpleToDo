@@ -5,7 +5,8 @@
     <string name="hint_todo_item_description">Description</string>
     <string name="label_due_date">Due Date</string>
     <string name="label_item_priority">Priority</string>
-    <string name="label_todo_save">Save</string>
+    <string name="label_todo_item_save">Save</string>
+    <string name="label_todo_item_complete">Completed</string>
 
     <string-array name="priority_list">
         <item>HIGH</item>

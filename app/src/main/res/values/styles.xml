@@ -14,6 +14,7 @@
         <!--<item name="android:textStyle">bold</item>-->
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/textColor</item>
     </style>
 
     <style name="ToDoFloatingLabel" parent="Widget.Design.TextInputLayout">
@@ -21,6 +22,7 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="hintTextAppearance">@style/ToDoFloatingLabel.TextAppearance.Design.Hint</item>
+        <item name="android:textColor">@color/textColor</item>
     </style>
 
     <style name="ToDoFloatingLabel.TextAppearance.Design.Hint" parent="TextAppearance.Design.Hint">
