@@ -1,16 +1,10 @@
 <resources>
     <string name="app_name">SimpleToDo</string>
     <string name="edit_activity_title">Edit Item</string>
-    <string name="hint_todo_item_name">Name</string>
-    <string name="hint_todo_item_description">Description</string>
-    <string name="label_due_date">Due Date</string>
+    <string name="hint_item_name">Name</string>
+    <string name="hint_item_description">Description</string>
+    <string name="hint_item_due_date">Due Date</string>
     <string name="label_item_priority">Priority</string>
-    <string name="label_todo_item_save">Save</string>
-    <string name="label_todo_item_complete">Completed</string>
-
-    <string-array name="duedate_list">
-        <item>TODAY</item>
-        <item>TOMORROW</item>
-        <item>PICK A DATE</item>
-    </string-array>
+    <string name="label_item_save">Save</string>
+    <string name="label_item_complete">Completed</string>
 </resources>

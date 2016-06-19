@@ -8,37 +8,29 @@ import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.SeekBar;
+import android.widget.Toast;
 
 import com.codepath.simpletodo.R;
 import com.codepath.simpletodo.models.Priority;
 import com.codepath.simpletodo.models.ToDoItem;
 import com.codepath.simpletodo.services.ToDoItemPersistenceService;
-import com.codepath.simpletodo.views.PopupAwareSpinner;
+import com.codepath.simpletodo.views.HideKeyboardEditTextFocusChangeListener;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class EditItemActivity extends AppCompatActivity {
     public static final String EXTRA_ITEM = "EditItemActivity.ITEM";
-    private static final int POSITION_TODAY = 0;
-    private static final int POSITION_TOMORROW = 1;
-    private static final int POSITION_PICK_A_DATE = 2;
-
     private static final String PATTERN_DATE = "yyyy-MMM-dd";
 
     @BindView(R.id.tie_item_name)
@@ -50,8 +42,8 @@ public class EditItemActivity extends AppCompatActivity {
     @BindView(R.id.tie_item_description)
     TextInputEditText mItemDescEditText;
 
-    @BindView(R.id.spinner_item_duedate)
-    PopupAwareSpinner mDueDateSpinner;
+    @BindView(R.id.tie_item_duedate)
+    TextInputEditText mItemDueDateEditText;
 
     @BindView(R.id.sb_item_priority)
     SeekBar mPrioritySeekBar;
@@ -62,8 +54,7 @@ public class EditItemActivity extends AppCompatActivity {
     @BindView(R.id.cb_item_complete)
     CheckBox mCompletedCheckbox;
 
-    private String[] mStaticDueDates;
-    private ArrayAdapter<String> mDueDateAdapter;
+    private HideKeyboardEditTextFocusChangeListener mHideKeyboardEditTextFocusChangeListener;
 
     private ToDoItem mToDoItem;
 
@@ -86,14 +77,16 @@ public class EditItemActivity extends AppCompatActivity {
         mToDoItem = getIntent().getParcelableExtra(EXTRA_ITEM);
 
         ButterKnife.bind(this);
+        mHideKeyboardEditTextFocusChangeListener = new HideKeyboardEditTextFocusChangeListener();
         initViews();
 
         if (mToDoItem != null) {
             bindViews();
         } else {
+            // new item
             mToDoItem = new ToDoItem();
+            // default to today
             setDate(getToday());
-            addDateToTheFrontOfDropdown(new Date(mToDoItem.getDueDate()));
         }
     }
 
@@ -107,7 +100,6 @@ public class EditItemActivity extends AppCompatActivity {
         mPrioritySeekBar.setProgress(mToDoItem.getPriority().getOrder());
 
         setDate(new Date(mToDoItem.getDueDate()));
-        addDateToTheFrontOfDropdown(new Date(mToDoItem.getDueDate()));
 
         mCompletedCheckbox.setChecked(mToDoItem.isCompleted());
     }
@@ -131,6 +123,9 @@ public class EditItemActivity extends AppCompatActivity {
                 }
             }
         });
+        mItemNameEditText.setOnFocusChangeListener(mHideKeyboardEditTextFocusChangeListener);
+
+        mItemDescEditText.setOnFocusChangeListener(mHideKeyboardEditTextFocusChangeListener);
 
         // set color based on its default value
         setPrioritySeekBarColor(mPrioritySeekBar, mPrioritySeekBar.getProgress());
@@ -151,42 +146,13 @@ public class EditItemActivity extends AppCompatActivity {
             }
         });
 
-        mStaticDueDates = getResources().getStringArray(R.array.duedate_list);
-        final List<String> dueDateList = new ArrayList<>(Arrays.asList(mStaticDueDates));
-
-        mDueDateAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, dueDateList);
-        mDueDateAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        mDueDateSpinner.setAdapter(mDueDateAdapter);
-        mDueDateSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        mItemDueDateEditText.setInputType(InputType.TYPE_NULL);
+        mItemDueDateEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public void onItemSelected(final AdapterView<?> parent, final View view, final int position, final long id) {
-                final String selectedOption = mDueDateAdapter.getItem(position);
-                if (mStaticDueDates[POSITION_TODAY] == selectedOption) {
-                    setDate(getToday());
-                } else if (mStaticDueDates[POSITION_TOMORROW] == selectedOption) {
-                    setDate(getTomorrow());
-                } else if (mStaticDueDates[POSITION_PICK_A_DATE] == selectedOption) {
-                    // TODO - open calendar picker
+            public void onFocusChange(final View v, final boolean hasFocus) {
+                if (hasFocus) {
+                    Toast.makeText(EditItemActivity.this, "Show Calendar", Toast.LENGTH_SHORT).show();
                 }
-            }
-
-            @Override
-            public void onNothingSelected(final AdapterView<?> parent) {
-                // no-op
-            }
-        });
-
-        mDueDateSpinner.setSpinnerEventsListener(new PopupAwareSpinner.OnSpinnerEventsListener() {
-            @Override
-            public void onSpinnerOpened() {
-                // remove the date
-                mDueDateAdapter.remove(mDueDateAdapter.getItem(0));
-            }
-
-            @Override
-            public void onSpinnerClosed() {
-                addDateToTheFrontOfDropdown(new Date(mToDoItem.getDueDate()));
             }
         });
 
@@ -248,20 +214,9 @@ public class EditItemActivity extends AppCompatActivity {
         return new Date(System.currentTimeMillis());
     }
 
-    // note, we are deliberately using java.sql.Date to ignore hour, min and sec
-    private Date getTomorrow() {
-        final Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DAY_OF_YEAR, 1);
-        return new Date(calendar.getTimeInMillis());
-    }
-
     private void setDate(final Date date) {
+        mItemDueDateEditText.setText(formatDate(date));
         mToDoItem.setDueDate(date.getTime());
-    }
-
-    private void addDateToTheFrontOfDropdown(final Date date) {
-        // insert at the front
-        mDueDateAdapter.insert(formatDate(date), 0);
     }
 
     private String formatDate(final Date date) {
