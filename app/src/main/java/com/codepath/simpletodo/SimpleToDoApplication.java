@@ -8,13 +8,15 @@ import com.codepath.simpletodo.di.ApplicationComponent;
 import com.codepath.simpletodo.di.modules.ApplicationModule;
 import com.codepath.simpletodo.di.DaggerApplicationComponent;
 
+import net.danlew.android.joda.JodaTimeAndroid;
+
 public class SimpleToDoApplication extends Application {
     private ApplicationComponent component;
 
     @Override
     public void onCreate() {
         super.onCreate();
-
+        JodaTimeAndroid.init(this);
         initDependencyInjection();
     }
 

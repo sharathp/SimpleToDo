@@ -30,6 +30,7 @@ import com.codepath.simpletodo.views.HideKeyboardEditTextFocusChangeListener;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import butterknife.BindView;
@@ -223,16 +224,10 @@ public class EditItemActivity extends AppCompatActivity implements DatePickerDia
 
     private void setPrioritySeekBarColor(final SeekBar seekBar, final int progress) {
         // default low
-        int colorResId = R.color.priority_low;
-        switch(progress) {
-            case 1: {
-                colorResId = R.color.priority_medium;
-                break;
-            }
-            case 2: {
-                colorResId = R.color.priority_high;
-                break;
-            }
+        int colorResId = Priority.LOW.getColorResourceId();
+        final Priority priority = Priority.getPriorityByOrder(progress);
+        if (priority != null) {
+            colorResId = priority.getColorResourceId();
         }
 
         final int color = getResources().getColor(colorResId);
@@ -268,7 +263,9 @@ public class EditItemActivity extends AppCompatActivity implements DatePickerDia
 
     // note, we are deliberately using java.sql.Date to ignore hour, min and sec
     private Date getToday() {
-        return new Date(System.currentTimeMillis());
+        final Calendar calendar = Calendar.getInstance();
+        final GregorianCalendar gregorianCalendar = new GregorianCalendar(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+        return new Date(gregorianCalendar.getTimeInMillis());
     }
 
     private void setDate(final Date date) {
