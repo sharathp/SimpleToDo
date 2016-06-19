@@ -2,6 +2,7 @@ package com.codepath.simpletodo.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
@@ -10,7 +11,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.SeekBar;
 
 import com.codepath.simpletodo.R;
 import com.codepath.simpletodo.models.ToDoItem;
@@ -31,8 +32,8 @@ public class EditItemActivity extends AppCompatActivity {
     @BindView(R.id.acs_item_duedate)
     AppCompatSpinner mDueDateSpinner;
 
-    @BindView(R.id.acs_item_priority)
-    AppCompatSpinner mPrioritySpinner;
+    @BindView(R.id.sb_item_priority)
+    SeekBar mPrioritySeekBar;
 
     @BindView(R.id.btn_save_item)
     Button mSaveButton;
@@ -61,7 +62,6 @@ public class EditItemActivity extends AppCompatActivity {
 
     private void initViews() {
         mItemNameEditText.setText(mToDoItem.getName());
-        mItemNameEditText.setSelection(mToDoItem.getName().length());
         mItemNameEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(final CharSequence s, final int start, final int count, final int after) {
@@ -83,20 +83,42 @@ public class EditItemActivity extends AppCompatActivity {
             }
         });
 
-        mDueDateSpinner.post(new Runnable() {
-            @Override
-            public void run() {
-                // set the width of spinners to be the same
-                final int dueDateSpinnerWidth = mDueDateSpinner.getWidth();
-                final int prioritySpinnerWidth = mPrioritySpinner.getWidth();
+        // set color based on its default value
+        setPrioritySeekBarColor(mPrioritySeekBar, mPrioritySeekBar.getProgress());
 
-                if (dueDateSpinnerWidth > prioritySpinnerWidth) {
-                    mPrioritySpinner.getLayoutParams().width = dueDateSpinnerWidth;
-                } else {
-                    mDueDateSpinner.getLayoutParams().width = prioritySpinnerWidth;
-                }
+        mPrioritySeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(final SeekBar seekBar, final int progress, final boolean fromUser) {
+                setPrioritySeekBarColor(seekBar, progress);
+            }
+
+            @Override
+            public void onStartTrackingTouch(final SeekBar seekBar) {
+                // no-op
+            }
+
+            @Override
+            public void onStopTrackingTouch(final SeekBar seekBar) {
+                // no-op
             }
         });
+
+
+
+//        mDueDateSpinner.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                // set the width of spinners to be the same
+//                final int dueDateSpinnerWidth = mDueDateSpinner.getWidth();
+//                final int prioritySpinnerWidth = mPrioritySpinner.getWidth();
+//
+//                if (dueDateSpinnerWidth > prioritySpinnerWidth) {
+//                    mPrioritySpinner.getLayoutParams().width = dueDateSpinnerWidth;
+//                } else {
+//                    mDueDateSpinner.getLayoutParams().width = prioritySpinnerWidth;
+//                }
+//            }
+//        });
 
         mSaveButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,6 +126,25 @@ public class EditItemActivity extends AppCompatActivity {
                 onSaveItem();
             }
         });
+    }
+
+    private void setPrioritySeekBarColor(final SeekBar seekBar, final int progress) {
+        // default low
+        int colorResId = R.color.priority_low;
+        switch(progress) {
+            case 1: {
+                colorResId = R.color.priority_medium;
+                break;
+            }
+            case 2: {
+                colorResId = R.color.priority_high;
+                break;
+            }
+        }
+
+        final int color = getResources().getColor(colorResId);
+        seekBar.getProgressDrawable().setColorFilter(color, PorterDuff.Mode.SRC_IN);
+        seekBar.getThumb().setColorFilter(color, PorterDuff.Mode.SRC_IN);
     }
 
     private void onSaveItem() {

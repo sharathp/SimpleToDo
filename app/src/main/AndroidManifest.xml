@@ -19,7 +19,7 @@
         </activity>
         <activity android:name=".activities.EditItemActivity"
                   android:label="@string/edit_activity_title"
-                  android:windowSoftInputMode="adjustPan"/>
+                  android:windowSoftInputMode="stateHidden|adjustPan"/>
 
         <service android:name=".services.ToDoItemPersistenceService"
             android:exported="false"/>
