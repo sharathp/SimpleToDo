@@ -28,6 +28,7 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile dependencies.junit
     compile dependencies.appCompat
+    compile dependencies.supportDesign
 
     // dagger
     // this is to fix dagger 2.2 issue - https://github.com/rharter/auto-value-gson/issues/43

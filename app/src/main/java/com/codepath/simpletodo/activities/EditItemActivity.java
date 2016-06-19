@@ -3,7 +3,9 @@ package com.codepath.simpletodo.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatSpinner;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -20,8 +22,17 @@ import butterknife.ButterKnife;
 public class EditItemActivity extends AppCompatActivity {
     public static final String EXTRA_ITEM = "EditItemActivity.ITEM";
 
-    @BindView(R.id.edit_item_name)
-    EditText mItemNameEditText;
+    @BindView(R.id.tie_item_name)
+    TextInputEditText mItemNameEditText;
+
+    @BindView(R.id.tie_item_description)
+    TextInputEditText mItemDescEditText;
+
+    @BindView(R.id.acs_item_duedate)
+    AppCompatSpinner mDueDateSpinner;
+
+    @BindView(R.id.acs_item_priority)
+    AppCompatSpinner mPrioritySpinner;
 
     @BindView(R.id.btn_save_item)
     Button mSaveButton;
@@ -68,6 +79,21 @@ public class EditItemActivity extends AppCompatActivity {
                     mSaveButton.setEnabled(false);
                 } else {
                     mSaveButton.setEnabled(true);
+                }
+            }
+        });
+
+        mDueDateSpinner.post(new Runnable() {
+            @Override
+            public void run() {
+                // set the width of spinners to be the same
+                final int dueDateSpinnerWidth = mDueDateSpinner.getWidth();
+                final int prioritySpinnerWidth = mPrioritySpinner.getWidth();
+
+                if (dueDateSpinnerWidth > prioritySpinnerWidth) {
+                    mPrioritySpinner.getLayoutParams().width = dueDateSpinnerWidth;
+                } else {
+                    mDueDateSpinner.getLayoutParams().width = prioritySpinnerWidth;
                 }
             }
         });
