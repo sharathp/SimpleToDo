@@ -11,6 +11,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.codepath.simpletodo.R;
+import com.codepath.simpletodo.models.Priority;
 import com.codepath.simpletodo.models.ToDoItem;
 
 import butterknife.BindView;
@@ -73,7 +74,8 @@ public class ToDoItemView extends RelativeLayout {
         final String relativeTime = DateUtils.getRelativeTimeSpanString(mItem.getDueDate(), System.currentTimeMillis(), DateUtils.DAY_IN_MILLIS,
                 DateUtils.FORMAT_ABBREV_RELATIVE).toString();
         mDueDateTextView.setText(relativeTime);
-        ((GradientDrawable) mPriorityIndicatorView.getBackground()).setColor(getResources().getColor(mItem.getPriority().getColorResourceId()));
-        mPriorityIndicatorView.setText(mItem.getPriority().name());
+        final Priority priority = Priority.getPriorityByOrder(mItem.getPriority());
+        ((GradientDrawable) mPriorityIndicatorView.getBackground()).setColor(getResources().getColor(priority.getColorResourceId()));
+        mPriorityIndicatorView.setText(priority.name());
     }
 }

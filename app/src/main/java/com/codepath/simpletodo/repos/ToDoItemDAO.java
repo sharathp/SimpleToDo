@@ -25,7 +25,6 @@ public class ToDoItemDAO {
     public SquidSupportCursorLoader<ToDoItem> getAllToDoItems() {
         final Query query = Query.select(ToDoItem.PROPERTIES)
                 .orderBy(Order.asc(ToDoItem.DUE_DATE))
-                // TODO - modify order to be a int
                 .orderBy(Order.desc(ToDoItem.PRIORITY))
                 .orderBy(Order.asc(ToDoItem.NAME));
         final SquidSupportCursorLoader<ToDoItem> loader = new SquidSupportCursorLoader<>(mContext, mDatabase, ToDoItem.class, query);

@@ -26,11 +26,11 @@ import com.codepath.simpletodo.fragments.DatePickerFragment;
 import com.codepath.simpletodo.models.Priority;
 import com.codepath.simpletodo.models.ToDoItem;
 import com.codepath.simpletodo.services.ToDoItemPersistenceService;
+import com.codepath.simpletodo.utils.DateUtils;
 import com.codepath.simpletodo.views.HideKeyboardEditTextFocusChangeListener;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import butterknife.BindView;
@@ -95,7 +95,7 @@ public class EditItemActivity extends AppCompatActivity implements DatePickerDia
             // new item
             mToDoItem = new ToDoItem();
             // default to today
-            setDate(getToday());
+            setDate(DateUtils.getToday());
         }
     }
 
@@ -140,7 +140,7 @@ public class EditItemActivity extends AppCompatActivity implements DatePickerDia
             mItemDescEditText.setText(mToDoItem.getDescription());
         }
 
-        mPrioritySeekBar.setProgress(mToDoItem.getPriority().getOrder());
+        mPrioritySeekBar.setProgress(mToDoItem.getPriority());
 
         setDate(new Date(mToDoItem.getDueDate()));
 
@@ -218,8 +218,8 @@ public class EditItemActivity extends AppCompatActivity implements DatePickerDia
     }
 
     private void showCalendar() {
-        final DatePickerFragment newFragment = new DatePickerFragment();
-        newFragment.show(getSupportFragmentManager(), "datePicker");
+        final DatePickerFragment datePickerFragment = DatePickerFragment.createInstance(mToDoItem.getDueDate());
+        datePickerFragment.show(getSupportFragmentManager(), "datePicker");
     }
 
     private void setPrioritySeekBarColor(final SeekBar seekBar, final int progress) {
@@ -243,7 +243,7 @@ public class EditItemActivity extends AppCompatActivity implements DatePickerDia
         }
 
         mToDoItem.setName(updatedName.trim());
-        mToDoItem.setPriority(Priority.getPriorityByOrder(mPrioritySeekBar.getProgress()));
+        mToDoItem.setPriority(mPrioritySeekBar.getProgress());
 
         final String updatedDescription = mItemDescEditText.getText().toString();
         if (! TextUtils.isEmpty(updatedDescription)) {
@@ -259,13 +259,6 @@ public class EditItemActivity extends AppCompatActivity implements DatePickerDia
         data.putExtra(EXTRA_ITEM, mToDoItem);
         setResult(RESULT_OK, data);
         finish();
-    }
-
-    // note, we are deliberately using java.sql.Date to ignore hour, min and sec
-    private Date getToday() {
-        final Calendar calendar = Calendar.getInstance();
-        final GregorianCalendar gregorianCalendar = new GregorianCalendar(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
-        return new Date(gregorianCalendar.getTimeInMillis());
     }
 
     private void setDate(final Date date) {

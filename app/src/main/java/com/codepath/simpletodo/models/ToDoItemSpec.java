@@ -16,11 +16,11 @@ public class ToDoItemSpec {
     public String description;
 
     @ColumnSpec(constraints = "NOT NULL")
-    public long dueDate;
+    public Long dueDate;
 
     @ColumnSpec(constraints = "NOT NULL")
-    private Priority priority;
+    private Integer priority;
 
     @ColumnSpec(constraints = "NOT NULL")
-    private boolean completed;
+    private Boolean completed;
 }
