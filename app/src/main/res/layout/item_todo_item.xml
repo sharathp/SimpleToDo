@@ -5,7 +5,5 @@
                                             android:layout_height="wrap_content"
                                             android:orientation="vertical"
                                             android:background="?android:attr/selectableItemBackground"
-                                            android:paddingLeft="@dimen/padding_horizontal_todo_item"
-                                            android:paddingRight="@dimen/padding_horizontal_todo_item"
                                             android:paddingTop="@dimen/padding_vertical_todo_item"
                                             android:paddingBottom="@dimen/padding_vertical_todo_item" />
