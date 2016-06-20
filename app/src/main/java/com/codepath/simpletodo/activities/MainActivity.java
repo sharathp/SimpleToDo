@@ -49,6 +49,9 @@ public class MainActivity extends AppCompatActivity implements ToDoItemAdapter.T
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setIcon(R.drawable.ic_alarm_tick);
+
         ButterKnife.bind(this);
         SimpleToDoApplication.from(this).getComponent().inject(this);
 
