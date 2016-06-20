@@ -10,4 +10,7 @@
     <string name="label_item_complete">Completed</string>
     <string name="action_delete">Delete</string>
     <string name="label_item_create">New Item</string>
+    <string name="action_show_all">Show All</string>
+    <string name="action_show_not_completed">Show Incomplete</string>
+    <string name="action_hide_past">Hide Past Items</string>
 </resources>
