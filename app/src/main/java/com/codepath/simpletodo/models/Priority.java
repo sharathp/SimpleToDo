@@ -3,9 +3,9 @@ package com.codepath.simpletodo.models;
 import com.codepath.simpletodo.R;
 
 public enum Priority {
-    HIGH(2, R.color.priority_high),
-    MEDIUM(1, R.color.priority_medium),
-    LOW(0, R.color.priority_low);
+    HIGH(2, R.color.color_priority_high),
+    MEDIUM(1, R.color.color_priority_medium),
+    LOW(0, R.color.color_priority_low);
 
     private final int mOrder;
     private final int mColorResourceId;

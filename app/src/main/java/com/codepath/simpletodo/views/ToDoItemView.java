@@ -3,10 +3,10 @@ package com.codepath.simpletodo.views;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Paint;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.text.format.DateUtils;
 import android.util.AttributeSet;
-import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -26,8 +26,8 @@ public class ToDoItemView extends RelativeLayout {
     @BindView(R.id.tv_due_date)
     TextView mDueDateTextView;
 
-    @BindView(R.id.view_priority)
-    View mPriorityIndicatorView;
+    @BindView(R.id.tv_priority)
+    TextView mPriorityIndicatorView;
 
     public ToDoItemView(final Context context) {
         super(context);
@@ -64,13 +64,16 @@ public class ToDoItemView extends RelativeLayout {
         mNameTextView.setText(mItem.getName());
         if (mItem.isCompleted()) {
             mNameTextView.setPaintFlags(mNameTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+//            setBackgroundColor(getResources().getColor(R.color.color_item_complete));
         } else {
             mNameTextView.setPaintFlags(mNameTextView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+//            setBackgroundColor(getResources().getColor(R.color.color_item_not_complete));
         }
 
         final String relativeTime = DateUtils.getRelativeTimeSpanString(mItem.getDueDate(), System.currentTimeMillis(), DateUtils.DAY_IN_MILLIS,
                 DateUtils.FORMAT_ABBREV_RELATIVE).toString();
         mDueDateTextView.setText(relativeTime);
-        mPriorityIndicatorView.setBackgroundColor(getResources().getColor(mItem.getPriority().getColorResourceId()));
+        ((GradientDrawable) mPriorityIndicatorView.getBackground()).setColor(getResources().getColor(mItem.getPriority().getColorResourceId()));
+        mPriorityIndicatorView.setText(mItem.getPriority().name());
     }
 }

@@ -24,7 +24,9 @@ public class ToDoItemDAO {
     // even though this seems unnecessary, this helps keep track of all clients
     public SquidSupportCursorLoader<ToDoItem> getAllToDoItems() {
         final Query query = Query.select(ToDoItem.PROPERTIES)
-                .orderBy(Order.desc(ToDoItem.DUE_DATE))
+                .orderBy(Order.asc(ToDoItem.DUE_DATE))
+                // TODO - modify order to be a int
+                .orderBy(Order.desc(ToDoItem.PRIORITY))
                 .orderBy(Order.asc(ToDoItem.NAME));
         final SquidSupportCursorLoader<ToDoItem> loader = new SquidSupportCursorLoader<>(mContext, mDatabase, ToDoItem.class, query);
         loader.setNotificationUri(ToDoItem.CONTENT_URI);

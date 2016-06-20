@@ -8,24 +8,38 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@android:color/black"
+        android:layout_marginBottom="@dimen/margin_small"
         android:singleLine="true"
         android:maxLines="1"
         android:ellipsize="end"
-        android:textSize="18sp"/>
+        android:textSize="@dimen/text_size_task_list_item_name"/>
+
+    <ImageView
+        android:id="@+id/iv_alarm"
+        android:layout_width="@dimen/width_duedate_alarm"
+        android:layout_height="@dimen/height_duedate_alarm"
+        android:src="@drawable/ic_alarm_black"
+        android:layout_marginRight="@dimen/margin_xxsmall"
+        android:layout_below="@id/tv_name" />
 
     <TextView
         android:id="@+id/tv_due_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tv_name"
-        android:layout_marginLeft="@dimen/margin_small"
-        android:textSize="12sp"/>
+        android:layout_toRightOf="@id/iv_alarm"
+        android:layout_alignBottom="@id/iv_alarm"
+        android:textSize="@dimen/text_size_task_list_item_duedate"/>
 
-    <View
-        android:id="@+id/view_priority"
+    <TextView
+        android:id="@+id/tv_priority"
         android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_width="@dimen/width_priority_indicator"
-        android:layout_height="@dimen/height_priority_indicator"/>
+        android:layout_alignBottom="@id/iv_alarm"
+        android:padding="@dimen/margin_xxsmall"
+        android:background="@drawable/round_rect"
+        android:textColor="@color/priorityTextColor"
+        android:textStyle="bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_size_task_list_item_priority"/>
 
 </merge>
