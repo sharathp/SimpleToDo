@@ -30,7 +30,7 @@
                 style="@style/ToDoFloatingLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/margin_normal">
+                android:layout_marginBottom="@dimen/margin_small">
 
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/tie_item_name"
@@ -43,29 +43,29 @@
                     android:hint="@string/hint_item_name" />
             </android.support.design.widget.TextInputLayout>
 
-            <TextView
-                android:id="@+id/tv_item_priority_label"
-                style="@style/ToDoFieldLabel"
-                android:text="@string/label_item_priority"
-                android:layout_below="@id/til_item_name"
-                android:layout_marginBottom="@dimen/margin_normal"
-                android:layout_marginRight="@dimen/margin_large"/>
-
-            <SeekBar
-                android:id="@+id/sb_item_priority"
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/til_item_priority"
+                style="@style/ToDoFloatingLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/tv_item_priority_label"
                 android:layout_below="@id/til_item_name"
-                android:progress="1"
-                android:max="2"/>
+                android:layout_marginBottom="@dimen/margin_small">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/tie_item_priority"
+                    style="@style/ToDoFieldLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hint_item_priority"
+                    android:imeOptions="actionNone"/>
+            </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/til_item_duedate"
                 style="@style/ToDoFloatingLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/tv_item_priority_label"
+                android:layout_below="@id/til_item_priority"
                 android:layout_marginBottom="@dimen/margin_small">
 
                 <android.support.design.widget.TextInputEditText

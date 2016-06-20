@@ -3,7 +3,6 @@ package com.codepath.simpletodo.activities;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputEditText;
@@ -19,10 +18,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
-import android.widget.SeekBar;
 
 import com.codepath.simpletodo.R;
 import com.codepath.simpletodo.fragments.DatePickerFragment;
+import com.codepath.simpletodo.fragments.PriorityPickerFragment;
 import com.codepath.simpletodo.models.Priority;
 import com.codepath.simpletodo.models.ToDoItem;
 import com.codepath.simpletodo.services.ToDoItemPersistenceService;
@@ -36,7 +35,7 @@ import java.util.GregorianCalendar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class EditItemActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
+public class EditItemActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, PriorityPickerFragment.OnPrioritySetListener {
     public static final String EXTRA_ITEM = "EditItemActivity.ITEM";
     private static final String PATTERN_DATE = "dd-MMM-yyyy";
 
@@ -52,8 +51,8 @@ public class EditItemActivity extends AppCompatActivity implements DatePickerDia
     @BindView(R.id.tie_item_duedate)
     TextInputEditText mItemDueDateEditText;
 
-    @BindView(R.id.sb_item_priority)
-    SeekBar mPrioritySeekBar;
+    @BindView(R.id.tie_item_priority)
+    TextInputEditText mItemPriorityEditText;
 
     @BindView(R.id.fab_save)
     FloatingActionButton mSaveButton;
@@ -96,6 +95,7 @@ public class EditItemActivity extends AppCompatActivity implements DatePickerDia
             mToDoItem = new ToDoItem();
             // default to today
             setDate(DateUtils.getToday());
+            setPriority(1);
         }
     }
 
@@ -133,6 +133,11 @@ public class EditItemActivity extends AppCompatActivity implements DatePickerDia
         setDate(new Date(calendar.getTimeInMillis()));
     }
 
+    @Override
+    public void onPrioritySet(final int priority) {
+        setPriority(priority);
+    }
+
     private void bindViews() {
         mItemNameEditText.setText(mToDoItem.getName());
 
@@ -140,7 +145,7 @@ public class EditItemActivity extends AppCompatActivity implements DatePickerDia
             mItemDescEditText.setText(mToDoItem.getDescription());
         }
 
-        mPrioritySeekBar.setProgress(mToDoItem.getPriority());
+        setPriority(mToDoItem.getPriority());
 
         setDate(new Date(mToDoItem.getDueDate()));
 
@@ -170,27 +175,7 @@ public class EditItemActivity extends AppCompatActivity implements DatePickerDia
 
         mItemDescEditText.setOnFocusChangeListener(mHideKeyboardEditTextFocusChangeListener);
 
-        // set color based on its default value
-        setPrioritySeekBarColor(mPrioritySeekBar, mPrioritySeekBar.getProgress());
-        mPrioritySeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(final SeekBar seekBar, final int progress, final boolean fromUser) {
-                setPrioritySeekBarColor(seekBar, progress);
-            }
-
-            @Override
-            public void onStartTrackingTouch(final SeekBar seekBar) {
-                // no-op
-            }
-
-            @Override
-            public void onStopTrackingTouch(final SeekBar seekBar) {
-                // no-op
-            }
-        });
-
         mItemDueDateEditText.setInputType(InputType.TYPE_NULL);
-
         // this is required once the focus is obtained
         mItemDueDateEditText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -209,6 +194,25 @@ public class EditItemActivity extends AppCompatActivity implements DatePickerDia
             }
         });
 
+        mItemPriorityEditText.setInputType(InputType.TYPE_NULL);
+        // this is required once the focus is obtained
+        mItemPriorityEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPriorityPicker();
+            }
+        });
+
+        // this is required the first time focus is obtained
+        mItemPriorityEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(final View v, final boolean hasFocus) {
+                if (hasFocus) {
+                    showPriorityPicker();
+                }
+            }
+        });
+
         mSaveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -222,17 +226,9 @@ public class EditItemActivity extends AppCompatActivity implements DatePickerDia
         datePickerFragment.show(getSupportFragmentManager(), "datePicker");
     }
 
-    private void setPrioritySeekBarColor(final SeekBar seekBar, final int progress) {
-        // default low
-        int colorResId = Priority.LOW.getColorResourceId();
-        final Priority priority = Priority.getPriorityByOrder(progress);
-        if (priority != null) {
-            colorResId = priority.getColorResourceId();
-        }
-
-        final int color = getResources().getColor(colorResId);
-        seekBar.getProgressDrawable().setColorFilter(color, PorterDuff.Mode.SRC_IN);
-        seekBar.getThumb().setColorFilter(color, PorterDuff.Mode.SRC_IN);
+    private void showPriorityPicker() {
+        final PriorityPickerFragment priorityPickerFragment = PriorityPickerFragment.createInstance(mToDoItem.getPriority());
+        priorityPickerFragment.show(getSupportFragmentManager(), "priorityPicker");
     }
 
     private void onSaveItem() {
@@ -243,7 +239,6 @@ public class EditItemActivity extends AppCompatActivity implements DatePickerDia
         }
 
         mToDoItem.setName(updatedName.trim());
-        mToDoItem.setPriority(mPrioritySeekBar.getProgress());
 
         final String updatedDescription = mItemDescEditText.getText().toString();
         if (! TextUtils.isEmpty(updatedDescription)) {
@@ -264,6 +259,11 @@ public class EditItemActivity extends AppCompatActivity implements DatePickerDia
     private void setDate(final Date date) {
         mItemDueDateEditText.setText(formatDate(date));
         mToDoItem.setDueDate(date.getTime());
+    }
+
+    private void setPriority(final int priority) {
+        mItemPriorityEditText.setText(Priority.getPriorityByOrder(priority).name());
+        mToDoItem.setPriority(priority);
     }
 
     private String formatDate(final Date date) {

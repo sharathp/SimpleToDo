@@ -5,6 +5,7 @@
     <string name="hint_item_description">Description</string>
     <string name="hint_item_due_date">Due Date</string>
     <string name="label_item_priority">Priority</string>
+    <string name="hint_item_priority">Priority</string>
     <string name="label_item_save">Save</string>
     <string name="label_item_complete">Completed</string>
     <string name="action_delete">Delete</string>

@@ -14,7 +14,7 @@ import java.sql.Date;
 import java.util.Calendar;
 
 public class DatePickerFragment extends DialogFragment {
-    public static final String ARG_SELECTED_DATE = "EditItemActivity.SELECTED";
+    public static final String ARG_SELECTED_DATE = "DatePickerFragment.DATE";
 
     private DatePickerDialog.OnDateSetListener mOnDateSetListener;
     private Long mSelectedDate;
