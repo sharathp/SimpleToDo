@@ -36,7 +36,7 @@
         android:layout_alignBottom="@id/iv_alarm"
         android:padding="@dimen/margin_xxsmall"
         android:background="@drawable/round_rect"
-        android:textColor="@color/priorityTextColor"
+        android:textColor="@color/color_priority_text"
         android:textStyle="bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -15,7 +15,7 @@
         android:text="@string/label_item_priority"
         android:padding="@dimen/margin_xxsmall"
         android:background="@drawable/round_rect"
-        android:textColor="@color/priorityTextColor"
+        android:textColor="@color/color_priority_text"
         android:textStyle="bold"
         android:layout_marginBottom="@dimen/margin_large"/>
 

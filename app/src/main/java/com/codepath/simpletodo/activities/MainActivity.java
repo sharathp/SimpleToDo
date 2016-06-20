@@ -11,6 +11,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.codepath.simpletodo.R;
@@ -41,6 +43,12 @@ public class MainActivity extends AppCompatActivity implements ToDoItemAdapter.T
 
     @BindView(R.id.fab_new)
     FloatingActionButton mFabNewItem;
+
+    @BindView(R.id.pb_item_loading)
+    ProgressBar mLoadingProgressBar;
+
+    @BindView(R.id.tv_no_todo_items)
+    TextView mNoItemsTextView;
 
     private ToDoItemAdapter mToDoItemAdapter;
 
@@ -114,6 +122,11 @@ public class MainActivity extends AppCompatActivity implements ToDoItemAdapter.T
 
     @Override
     public Loader<SquidCursor<ToDoItem>> onCreateLoader(final int id, final Bundle args) {
+        // show loader
+        mLoadingProgressBar.setVisibility(View.VISIBLE);
+        mNoItemsTextView.setVisibility(View.INVISIBLE);
+        mItemsRecyclerView.setVisibility(View.INVISIBLE);
+
         switch (id) {
             case LOADER_ID_ALL_TODO_ITEMS: {
                 return mToDoItemDAO.getAllToDoItems();
@@ -131,11 +144,16 @@ public class MainActivity extends AppCompatActivity implements ToDoItemAdapter.T
     public void onLoadFinished(final Loader<SquidCursor<ToDoItem>> loader, final SquidCursor<ToDoItem> data) {
         mToDoItemAdapter.swapCursor(data);
         // hide loader
+        mLoadingProgressBar.setVisibility(View.INVISIBLE);
 
         if (data.getCount() > 0) {
-            // hide empty message
+            // show recycler view
+            mNoItemsTextView.setVisibility(View.INVISIBLE);
+            mItemsRecyclerView.setVisibility(View.VISIBLE);
         } else {
             // show empty message
+            mNoItemsTextView.setVisibility(View.VISIBLE);
+            mItemsRecyclerView.setVisibility(View.INVISIBLE);
         }
     }
 

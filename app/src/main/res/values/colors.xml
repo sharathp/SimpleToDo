@@ -11,5 +11,8 @@
 
     <color name="color_item_not_complete">#FFFFFF</color>
     <color name="color_item_complete">#DCDCDC</color>
-    <color name="priorityTextColor">#FFFFFF</color>
+    <color name="color_priority_text">#FFFFFF</color>
+
+    <color name="color_no_items">#FF0000</color>
+
 </resources>

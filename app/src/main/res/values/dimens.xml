@@ -20,5 +20,6 @@
     <dimen name="text_size_task_list_item_name">18sp</dimen>
     <dimen name="text_size_task_list_item_duedate">12sp</dimen>
     <dimen name="text_size_task_list_item_priority">12sp</dimen>
+    <dimen name="text_size_no_items">20sp</dimen>
     <dimen name="margin_task_list_item_priority">12sp</dimen>
 </resources>
