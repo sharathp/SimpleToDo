@@ -11,12 +11,13 @@ import android.support.v4.app.DialogFragment;
 import com.codepath.simpletodo.utils.DateUtils;
 
 import java.sql.Date;
+import java.util.Calendar;
 
 public class DatePickerFragment extends DialogFragment {
     public static final String ARG_SELECTED_DATE = "EditItemActivity.SELECTED";
 
     private DatePickerDialog.OnDateSetListener mOnDateSetListener;
-    private Date mSelectedDate;
+    private Long mSelectedDate;
 
     public static DatePickerFragment createInstance(final Long dateInMillis) {
         final Bundle args = new Bundle();
@@ -32,9 +33,9 @@ public class DatePickerFragment extends DialogFragment {
         super.onCreate(savedInstanceState);
         final long selectedDateMillis = getArguments().getLong(ARG_SELECTED_DATE, -1);
         if (selectedDateMillis == -1) {
-            mSelectedDate = DateUtils.getToday();
+            mSelectedDate = DateUtils.getToday().getTime();
         } else {
-            mSelectedDate = new Date(selectedDateMillis);
+            mSelectedDate = selectedDateMillis;
         }
     }
 
@@ -52,9 +53,16 @@ public class DatePickerFragment extends DialogFragment {
         // use today as minimum
         final Date today = DateUtils.getToday();
 
+        final Calendar selectedCalendar = Calendar.getInstance();
+        selectedCalendar.setTimeInMillis(mSelectedDate);
+        final int selectedYear = selectedCalendar.get(Calendar.YEAR);
+        final int selectedMonth = selectedCalendar.get(Calendar.MONTH);
+        final int selectedDay = selectedCalendar.get(Calendar.DAY_OF_MONTH);
+
         // Create a new instance of DatePickerDialog and return it
-        final DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), mOnDateSetListener, mSelectedDate.getYear(), mSelectedDate.getMonth(), mSelectedDate.getDay());
+        final DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), mOnDateSetListener, selectedYear, selectedMonth, selectedDay);
         datePickerDialog.getDatePicker().setMinDate(today.getTime());
+        datePickerDialog.getDatePicker().updateDate(selectedYear, selectedMonth, selectedDay);
         datePickerDialog.setTitle(null);
 
         return datePickerDialog;
