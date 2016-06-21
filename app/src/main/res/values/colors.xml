@@ -13,6 +13,6 @@
     <color name="color_item_complete">#DCDCDC</color>
     <color name="color_priority_text">#FFFFFF</color>
 
-    <color name="color_no_items">#FF0000</color>
+    <color name="color_no_items">@color/textColor</color>
 
 </resources>
