@@ -50,6 +50,12 @@ public class ToDoItemPersistenceService extends IntentService {
         return intent;
     }
 
+    public static Intent createIntentToDeleteAll(final Context context) {
+        final Intent intent = new Intent(context, ToDoItemPersistenceService.class);
+        intent.putExtra(EXTRA_TODO_ACTION, ACTION_DELETE_ALL);
+        return intent;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -73,6 +79,10 @@ public class ToDoItemPersistenceService extends IntentService {
                 delete(intent);
                 break;
             }
+            case ACTION_DELETE_ALL: {
+                deleteAll();
+                break;
+            }
             default: {
                 Log.w(TAG, "Unknown action: " + action);
             }
@@ -94,11 +104,16 @@ public class ToDoItemPersistenceService extends IntentService {
         mToDoItemDAO.delete(toDoItemId);
     }
 
+    private void deleteAll() {
+        mToDoItemDAO.deleteAll();
+    }
+
     public static final int ACTION_INSERT = 0;
     public static final int ACTION_UPDATE = 1;
     public static final int ACTION_DELETE = 2;
+    public static final int ACTION_DELETE_ALL = 3;
 
-    @IntDef({ACTION_INSERT, ACTION_UPDATE, ACTION_DELETE})
+    @IntDef({ACTION_INSERT, ACTION_UPDATE, ACTION_DELETE, ACTION_DELETE_ALL})
     public @interface Action {
         // no-op
     }

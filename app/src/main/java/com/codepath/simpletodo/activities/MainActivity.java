@@ -20,6 +20,7 @@ import com.codepath.simpletodo.SimpleToDoApplication;
 import com.codepath.simpletodo.adapters.ToDoItemAdapter;
 import com.codepath.simpletodo.models.ToDoItem;
 import com.codepath.simpletodo.repos.ToDoItemDAO;
+import com.codepath.simpletodo.services.ToDoItemPersistenceService;
 import com.codepath.simpletodo.views.DividerItemDecoration;
 import com.yahoo.squidb.data.SquidCursor;
 
@@ -108,11 +109,14 @@ public class MainActivity extends AppCompatActivity implements ToDoItemAdapter.T
                 getSupportLoaderManager().initLoader(LOADER_ID_CURRENT_TODO_ITEMS, null, this);
                 return true;
             }
+            case R.id.action_delete_all: {
+                deleteAll();
+                return true;
+            }
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
-
 
     @Override
     public void onClick(final ToDoItem toDoItem) {
@@ -176,5 +180,10 @@ public class MainActivity extends AppCompatActivity implements ToDoItemAdapter.T
                 createNewItem();
             }
         });
+    }
+
+    private void deleteAll() {
+        final Intent deleteAllIntent = ToDoItemPersistenceService.createIntentToDeleteAll(this);
+        startService(deleteAllIntent);
     }
 }

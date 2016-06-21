@@ -14,4 +14,5 @@
     <string name="action_show_not_completed">Show Incomplete</string>
     <string name="action_hide_past">Hide Past Items</string>
     <string name="no_items_message">Nothing \"To-Do\"</string>
+    <string name="action_delete_all">Delete All</string>
 </resources>

@@ -73,4 +73,8 @@ public class ToDoItemDAO {
     public void delete(final long toDoItemId) {
         mDatabase.delete(ToDoItem.class, toDoItemId);
     }
+
+    public void deleteAll() {
+        mDatabase.deleteAll(ToDoItem.class);
+    }
 }
