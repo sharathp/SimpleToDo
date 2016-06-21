@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:gravity="center_horizontal"
+              android:orientation="vertical"
+              android:paddingBottom="@dimen/activity_vertical_margin"
+              android:paddingLeft="@dimen/activity_horizontal_margin"
+              android:paddingRight="@dimen/activity_horizontal_margin"
+              android:paddingTop="@dimen/activity_vertical_margin">
+
+    <TextView
+        android:id="@+id/tv_item_priority_label"
+        style="@style/ToDoFieldLabel"
+        android:text="@string/label_item_priority"
+        android:padding="@dimen/margin_xxsmall"
+        android:background="@drawable/round_rect"
+        android:textColor="@color/color_priority_text"
+        android:textStyle="bold"
+        android:layout_marginBottom="@dimen/margin_large"/>
+
+    <SeekBar
+        android:id="@+id/sb_item_priority"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="2"/>
+
+</LinearLayout>

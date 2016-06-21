@@ -2,5 +2,17 @@
 <resources>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#4CAF50</color>
+    <color name="textColor">#D9000000</color>
+
+    <color name="color_priority_low">#32CD32</color>
+    <color name="color_priority_medium">#FFA500</color>
+    <color name="color_priority_high">#FF0000</color>
+
+    <color name="color_item_not_complete">#FFFFFF</color>
+    <color name="color_item_complete">#DCDCDC</color>
+    <color name="color_priority_text">#FFFFFF</color>
+
+    <color name="color_no_items">#FF0000</color>
+
 </resources>

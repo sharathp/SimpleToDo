@@ -3,22 +3,31 @@
           xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application
+        android:name=".SimpleToDoApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity"
-                  android:windowSoftInputMode="stateVisible|adjustResize">
+        <activity android:name=".activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".EditItemActivity"
+        <activity android:name=".activities.EditItemActivity"
                   android:label="@string/edit_activity_title"
-                  android:windowSoftInputMode="stateVisible|adjustResize"/>
+                  android:windowSoftInputMode="stateHidden|adjustPan">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.MainActivity" />
+
+        </activity>
+
+        <service android:name=".services.ToDoItemPersistenceService"
+            android:exported="false"/>
     </application>
 
 </manifest>

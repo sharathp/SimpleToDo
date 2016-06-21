@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black"
+        android:layout_marginBottom="@dimen/margin_small"
+        android:singleLine="true"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:textSize="@dimen/text_size_task_list_item_name"/>
+
+    <LinearLayout
+        android:id="@+id/ll_due_date_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_name"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:id="@+id/iv_alarm"
+            android:layout_width="@dimen/width_duedate_alarm"
+            android:layout_height="@dimen/height_duedate_alarm"
+            android:src="@drawable/ic_alarm_black"
+            android:layout_marginRight="@dimen/margin_xxsmall"/>
+
+        <TextView
+            android:id="@+id/tv_due_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/iv_alarm"
+            android:layout_alignBottom="@id/iv_alarm"
+            android:textStyle="bold"
+            android:textSize="@dimen/text_size_task_list_item_duedate"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_priority"
+        android:layout_alignParentRight="true"
+        android:layout_alignBottom="@id/ll_due_date_container"
+        android:padding="@dimen/margin_xxsmall"
+        android:background="@drawable/round_rect"
+        android:textColor="@color/color_priority_text"
+        android:textStyle="bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_size_task_list_item_priority"/>
+
+</merge>

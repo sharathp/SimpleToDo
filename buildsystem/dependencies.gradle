@@ -1,0 +1,35 @@
+ext {
+    supportLibraryVersion = '23.4.0'
+    daggerVersion = '2.2'
+    squidbVersion = '2.1.0'
+    javaxAnnotationVersion = '1.0'
+    stethoVersion = '1.3.1'
+    junitVersion = '4.12'
+    butterKnifeVersion = '8.1.0'
+    javaPoetVersion = '1.7.0'
+
+    dependencies = [
+            appCompat : "com.android.support:appcompat-v7:$supportLibraryVersion",
+            recyclerView : "com.android.support:recyclerview-v7:$supportLibraryVersion",
+            supportV4 : "com.android.support:support-v4:$supportLibraryVersion",
+            supportDesign : "com.android.support:design:$supportLibraryVersion",
+
+            daggerCompiler : "com.google.dagger:dagger-compiler:$daggerVersion",
+            dagger : "com.google.dagger:dagger:$daggerVersion",
+
+            squidb: "com.yahoo.squidb:squidb:$squidbVersion",
+            squidbAnnotation: "com.yahoo.squidb:squidb-annotations:$squidbVersion",
+            squidbProcessor: "com.yahoo.squidb:squidb-processor:$squidbVersion",
+            squidbRecyclerView: "com.yahoo.squidb:squidb-recyclerview:$squidbVersion",
+            squidbSupportLoader: "com.yahoo.squidb:squidb-support-loader:$squidbVersion",
+
+            butterKnife: "com.jakewharton:butterknife:$butterKnifeVersion",
+            butterKnifeCompiler: "com.jakewharton:butterknife-compiler:$butterKnifeVersion",
+
+            javaxAnnotation: "javax.annotation:jsr250-api:$javaxAnnotationVersion",
+            stetho: "com.facebook.stetho:stetho:$stethoVersion",
+            javaPoet: "com.squareup:javapoet:$javaPoetVersion",
+
+            junit: "junit:junit:$junitVersion"
+    ]
+}

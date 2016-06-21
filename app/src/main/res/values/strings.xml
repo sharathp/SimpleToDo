@@ -1,4 +1,18 @@
 <resources>
     <string name="app_name">SimpleToDo</string>
     <string name="edit_activity_title">Edit Item</string>
+    <string name="hint_item_name">Name</string>
+    <string name="hint_item_description">Description</string>
+    <string name="hint_item_due_date">Due Date</string>
+    <string name="label_item_priority">Priority</string>
+    <string name="hint_item_priority">Priority</string>
+    <string name="label_item_save">Save</string>
+    <string name="label_item_complete">Completed</string>
+    <string name="action_delete">Delete</string>
+    <string name="label_item_create">New Item</string>
+    <string name="action_show_all">Show All</string>
+    <string name="action_show_not_completed">Show Incomplete</string>
+    <string name="action_hide_past">Hide Past Items</string>
+    <string name="no_items_message">Nothing \"To-Do\"</string>
+    <string name="action_delete_all">Delete All</string>
 </resources>
