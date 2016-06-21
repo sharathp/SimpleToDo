@@ -5,6 +5,11 @@ This is an Android demo application for managing ToDo items. See the [instructio
 ## Version 2
 Time spent: Approximately 10-15 hours
 
+List displays the Todo items sorted in the following order: (By default past items are hidden and a overflow menu options are available to show/hide past items)
+* Date Ascending
+* Priority Descending (High, Medium & Low)
+* Name Ascending
+
 Completed user stories:
 
  * [x] Required: Add and remove items from the todo list
