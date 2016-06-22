@@ -9,6 +9,7 @@ import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -60,6 +61,9 @@ public class EditItemActivity extends AppCompatActivity implements DatePickerDia
     @BindView(R.id.cb_item_complete)
     CheckBox mCompletedCheckbox;
 
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+
     private HideKeyboardEditTextFocusChangeListener mHideKeyboardEditTextFocusChangeListener;
 
     private ToDoItem mToDoItem;
@@ -80,11 +84,14 @@ public class EditItemActivity extends AppCompatActivity implements DatePickerDia
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_item);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        mToDoItem = getIntent().getParcelableExtra(EXTRA_ITEM);
 
         ButterKnife.bind(this);
+
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        mToDoItem = getIntent().getParcelableExtra(EXTRA_ITEM);
         mHideKeyboardEditTextFocusChangeListener = new HideKeyboardEditTextFocusChangeListener();
         initViews();
 

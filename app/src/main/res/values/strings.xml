@@ -15,4 +15,9 @@
     <string name="action_hide_past">Hide Past Items</string>
     <string name="no_items_message">Nothing \"To-Do\"</string>
     <string name="action_delete_all">Delete All</string>
+    <string name="drawer_label_home">Home</string>
+    <string name="drawer_label_all">All Items</string>
+    <string name="drawer_label_high">High Priority Items</string>
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
 </resources>

@@ -1,189 +1,122 @@
 package com.codepath.simpletodo.activities;
 
-import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
+import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.view.Menu;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.codepath.simpletodo.R;
-import com.codepath.simpletodo.SimpleToDoApplication;
-import com.codepath.simpletodo.adapters.ToDoItemAdapter;
-import com.codepath.simpletodo.models.ToDoItem;
-import com.codepath.simpletodo.repos.ToDoItemDAO;
-import com.codepath.simpletodo.services.ToDoItemPersistenceService;
-import com.codepath.simpletodo.views.DividerItemDecoration;
-import com.yahoo.squidb.data.SquidCursor;
-
-import javax.inject.Inject;
+import com.codepath.simpletodo.fragments.AllToDoListFragment;
+import com.codepath.simpletodo.fragments.HighPriorityToDoListFragment;
+import com.codepath.simpletodo.fragments.HomeToDoListFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements ToDoItemAdapter.ToDoItemClickListener,
-        LoaderManager.LoaderCallbacks<SquidCursor<ToDoItem>> {
+public class MainActivity extends AppCompatActivity {
+    private static final String TAG = MainActivity.class.getSimpleName();
+    private static final int INDEX_HOME = 0;
 
-    private static final int REQUEST_CODE_EDIT_ACTIVITY = 1;
-    private static final int LOADER_ID_CURRENT_TODO_ITEMS = 0;
-    private static final int LOADER_ID_ALL_TODO_ITEMS = 1;
+    @BindView(R.id.drawer_layout)
+    DrawerLayout mDrawerLayout;
 
-    @Inject
-    ToDoItemDAO mToDoItemDAO;
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
 
-    @BindView(R.id.rv_items)
-    RecyclerView mItemsRecyclerView;
+    @BindView(R.id.nv_drawer)
+    NavigationView mDrawer;
 
-    @BindView(R.id.fab_new)
-    FloatingActionButton mFabNewItem;
-
-    @BindView(R.id.pb_item_loading)
-    ProgressBar mLoadingProgressBar;
-
-    @BindView(R.id.tv_no_todo_items)
-    TextView mNoItemsTextView;
-
-    private ToDoItemAdapter mToDoItemAdapter;
+    private ActionBarDrawerToggle mDrawerToggle;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setIcon(R.drawable.ic_alarm_tick);
-
         ButterKnife.bind(this);
-        SimpleToDoApplication.from(this).getComponent().inject(this);
 
-        initViews();
-        getSupportLoaderManager().initLoader(LOADER_ID_CURRENT_TODO_ITEMS, null, this);
+        mDrawerToggle = setupDrawerToggle();
+        mDrawerLayout.addDrawerListener(mDrawerToggle);
+
+        setSupportActionBar(mToolbar);
+        setupDrawerContent();
+
+        showHome();
     }
 
-    private void createNewItem() {
-        final Intent intent = EditItemActivity.createIntent(MainActivity.this, null);
-        startActivityForResult(intent, REQUEST_CODE_EDIT_ACTIVITY);
+    private void showHome() {
+        // simulate clicking which shows home
+        selectDrawerItem(mDrawer.getMenu().getItem(INDEX_HOME));
     }
 
-    @Override
-    protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (REQUEST_CODE_EDIT_ACTIVITY != requestCode) {
-            return;
-        }
-
-        if (RESULT_OK == resultCode) {
-            final ToDoItem toDoItem = EditItemActivity.getItem(data);
-            if (toDoItem != null) {
-                Toast.makeText(MainActivity.this, toDoItem.getName(), Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(final Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+    private ActionBarDrawerToggle setupDrawerToggle() {
+        return new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar, R.string.drawer_open,  R.string.drawer_close);
     }
 
     @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_show_all: {
-                // remove the current items loader
-                getSupportLoaderManager().destroyLoader(LOADER_ID_CURRENT_TODO_ITEMS);
-                getSupportLoaderManager().initLoader(LOADER_ID_ALL_TODO_ITEMS, null, this);
-                return true;
-            }
-            case R.id.action_hide_past: {
-                getSupportLoaderManager().destroyLoader(LOADER_ID_ALL_TODO_ITEMS);
-                getSupportLoaderManager().initLoader(LOADER_ID_CURRENT_TODO_ITEMS, null, this);
-                return true;
-            }
-            case R.id.action_delete_all: {
-                deleteAll();
-                return true;
-            }
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onPostCreate(final Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+
+        mDrawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(final Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    private void setupDrawerContent() {
+        mDrawer.setNavigationItemSelectedListener(
+            new NavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(final MenuItem menuItem) {
+                    selectDrawerItem(menuItem);
+                    return true;
+                }
+            });
+    }
+
+    public void selectDrawerItem(final MenuItem menuItem) {
+        Fragment fragment;
+        switch(menuItem.getItemId()) {
+            case R.id.nav_home:
+                fragment = HomeToDoListFragment.createInstance();
+                break;
+            case R.id.nav_all:
+                fragment = AllToDoListFragment.createInstance();
+                break;
+            case R.id.nav_high:
+                fragment = HighPriorityToDoListFragment.createInstance();
+                break;
             default:
-                return super.onOptionsItemSelected(item);
+                Log.w(TAG, "Unknown menu item: " + menuItem.getTitle());
+                fragment = HomeToDoListFragment.createInstance();
         }
-    }
 
-    @Override
-    public void onClick(final ToDoItem toDoItem) {
-        final Intent intent = EditItemActivity.createIntent(MainActivity.this, toDoItem);
-        startActivityForResult(intent, REQUEST_CODE_EDIT_ACTIVITY);
-    }
+        // Insert the fragment by replacing any existing fragment
+        final FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.fl_content, fragment).commit();
 
-    @Override
-    public Loader<SquidCursor<ToDoItem>> onCreateLoader(final int id, final Bundle args) {
-        // show loader
-        mLoadingProgressBar.setVisibility(View.VISIBLE);
-        mNoItemsTextView.setVisibility(View.INVISIBLE);
-        mItemsRecyclerView.setVisibility(View.INVISIBLE);
-
-        switch (id) {
-            case LOADER_ID_ALL_TODO_ITEMS: {
-                return mToDoItemDAO.getAllToDoItems();
-            }
-            case LOADER_ID_CURRENT_TODO_ITEMS: {
-                return mToDoItemDAO.getCurrentToDoItems();
-            }
-            default: {
-                throw new RuntimeException("Unexpected loader with id: " + id);
-            }
-        }
-    }
-
-    @Override
-    public void onLoadFinished(final Loader<SquidCursor<ToDoItem>> loader, final SquidCursor<ToDoItem> data) {
-        mToDoItemAdapter.swapCursor(data);
-        // hide loader
-        mLoadingProgressBar.setVisibility(View.INVISIBLE);
-
-        if (data.getCount() > 0) {
-            // show recycler view
-            mNoItemsTextView.setVisibility(View.INVISIBLE);
-            mItemsRecyclerView.setVisibility(View.VISIBLE);
-        } else {
-            // show empty message
-            mNoItemsTextView.setVisibility(View.VISIBLE);
-            mItemsRecyclerView.setVisibility(View.INVISIBLE);
-        }
-    }
-
-    @Override
-    public void onLoaderReset(final Loader<SquidCursor<ToDoItem>> loader) {
-        mToDoItemAdapter.swapCursor(null);
-    }
-
-    private void initViews() {
-        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        mToDoItemAdapter = new ToDoItemAdapter(this);
-        mItemsRecyclerView.setLayoutManager(linearLayoutManager);
-        mItemsRecyclerView.setAdapter(mToDoItemAdapter);
-        mItemsRecyclerView.setHasFixedSize(true);
-        mItemsRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
-
-        mFabNewItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                createNewItem();
-            }
-        });
-    }
-
-    private void deleteAll() {
-        final Intent deleteAllIntent = ToDoItemPersistenceService.createIntentToDeleteAll(this);
-        startService(deleteAllIntent);
+        menuItem.setChecked(true);
+        setTitle(menuItem.getTitle());
+        mDrawerLayout.closeDrawers();
     }
 }

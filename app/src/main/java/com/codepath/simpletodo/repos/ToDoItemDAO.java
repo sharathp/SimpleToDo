@@ -2,6 +2,7 @@ package com.codepath.simpletodo.repos;
 
 import android.content.Context;
 
+import com.codepath.simpletodo.models.Priority;
 import com.codepath.simpletodo.models.ToDoItem;
 import com.codepath.simpletodo.utils.DateUtils;
 import com.yahoo.squidb.sql.Order;
@@ -35,9 +36,22 @@ public class ToDoItemDAO {
                 .orderBy(Order.asc(ToDoItem.DUE_DATE))
                 .orderBy(Order.desc(ToDoItem.PRIORITY))
                 .orderBy(Order.asc(ToDoItem.NAME));
-        final SquidSupportCursorLoader<ToDoItem> loader = new SquidSupportCursorLoader<>(mContext, mDatabase, ToDoItem.class, query);
-        loader.setNotificationUri(ToDoItem.CONTENT_URI);
-        return loader;
+        return getToDoItems(query);
+    }
+
+    // even though this seems unnecessary, this helps keep track of all clients
+
+    /**
+     * Return all High Priority ToDo Items.
+     *
+     * @return all High Prioiry ToDo Items
+     */
+    public SquidSupportCursorLoader<ToDoItem> getHighPriorityToDoItems() {
+        final Query query = Query.select(ToDoItem.PROPERTIES)
+                .where(ToDoItem.PRIORITY.eq(Priority.HIGH.getOrder()))
+                .orderBy(Order.asc(ToDoItem.DUE_DATE))
+                .orderBy(Order.asc(ToDoItem.NAME));
+        return getToDoItems(query);
     }
 
     // even though this seems unnecessary, this helps keep track of all clients
