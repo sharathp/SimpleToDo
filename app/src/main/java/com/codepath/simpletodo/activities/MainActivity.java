@@ -1,5 +1,7 @@
 package com.codepath.simpletodo.activities;
 
+import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -34,6 +36,10 @@ public class MainActivity extends AppCompatActivity {
     NavigationView mDrawer;
 
     private ActionBarDrawerToggle mDrawerToggle;
+
+    public static Intent createIntent(final Context context) {
+        return new Intent(context, MainActivity.class);
+    }
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {

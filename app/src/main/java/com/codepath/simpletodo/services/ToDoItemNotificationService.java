@@ -1,12 +1,17 @@
 package com.codepath.simpletodo.services;
 
 import android.app.IntentService;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
 
+import com.codepath.simpletodo.R;
 import com.codepath.simpletodo.SimpleToDoApplication;
+import com.codepath.simpletodo.activities.MainActivity;
 import com.codepath.simpletodo.models.Priority;
 import com.codepath.simpletodo.models.ToDoItem;
 import com.codepath.simpletodo.repos.ToDoItemDAO;
@@ -56,12 +61,11 @@ public class ToDoItemNotificationService extends IntentService {
                 return;
             }
 
-            ToDoItem item = new ToDoItem();
             while (cursor.moveToNext()) {
-                item.readPropertiesFromCursor(cursor);
-                if (Priority.HIGH.getOrder() == item.getPriority()) {
+                final int priority = cursor.get(ToDoItem.PRIORITY);
+                if (Priority.HIGH.getOrder() == priority) {
                     high++;
-                } else if (Priority.MEDIUM.getOrder() == item.getPriority()) {
+                } else if (Priority.MEDIUM.getOrder() == priority) {
                     medium++;
                 } else {
                     low++;
@@ -76,6 +80,29 @@ public class ToDoItemNotificationService extends IntentService {
     }
 
     private void sendNotification(final int high, final int medium, final int low) {
-        // TODO - send notification
+        final NotificationManager mNotificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        final StringBuilder sb = new StringBuilder();
+        sb.append("Total ToDo Items for today: ")
+                .append(high + medium + low)
+                .append(" [High: ").append(high)
+                .append("; Medium: ").append(high)
+                .append("; Low: ").append(high)
+                .append("]");
+
+        final int requestID = (int) System.currentTimeMillis();
+        final Intent intent = MainActivity.createIntent(this);
+        final PendingIntent pIntent = PendingIntent.getActivity(this, requestID, intent, 0);
+
+        final NotificationCompat.Builder builder =
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setContentTitle("SimpleToDo Reminder")
+                        .setContentText(sb.toString())
+                        .setContentIntent(pIntent)
+                        .setAutoCancel(true);
+
+        mNotificationManager.notify(0, builder.build());
     }
 }
