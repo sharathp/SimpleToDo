@@ -71,7 +71,6 @@ public class ToDoItemNotificationService extends IntentService {
                     low++;
                 }
             }
-            sendNotification(high, medium, low);
         } finally {
             cursor.close();
         }
