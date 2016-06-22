@@ -2,6 +2,8 @@
 <manifest package="com.codepath.simpletodo"
           xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
     <application
         android:name=".SimpleToDoApplication"
         android:allowBackup="true"
@@ -28,6 +30,14 @@
 
         <service android:name=".services.ToDoItemPersistenceService"
             android:exported="false"/>
-    </application>
 
+        <service
+            android:name=".services.ToDoItemNotificationService"
+            android:exported="false" />
+
+        <receiver
+            android:name=".receivers.TodayToDoNotificationReceiver"
+            android:process=":remote" />
+
+    </application>
 </manifest>

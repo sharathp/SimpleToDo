@@ -254,7 +254,7 @@ public class EditItemActivity extends AppCompatActivity implements DatePickerDia
 
         mToDoItem.setIsCompleted(mCompletedCheckbox.isChecked());
 
-        final Intent updateIntent = ToDoItemPersistenceService.createIntentToUpdate(this, mToDoItem);
+        final Intent updateIntent = ToDoItemPersistenceService.createIntentToPersist(this, mToDoItem);
         startService(updateIntent);
 
         final Intent data = new Intent();
