@@ -1,23 +1,30 @@
 <resources>
     <string name="app_name">SimpleToDo</string>
     <string name="edit_activity_title">Edit Item</string>
+
+    <string name="no_items_message">Nothing \"To-Do\"</string>
+
     <string name="hint_item_name">Name</string>
     <string name="hint_item_description">Description</string>
     <string name="hint_item_due_date">Due Date</string>
-    <string name="label_item_priority">Priority</string>
     <string name="hint_item_priority">Priority</string>
+
+    <string name="label_item_priority">Priority</string>
     <string name="label_item_save">Save</string>
     <string name="label_item_complete">Completed</string>
-    <string name="action_delete">Delete</string>
     <string name="label_item_create">New Item</string>
-    <string name="action_show_all">Show All</string>
-    <string name="action_show_not_completed">Show Incomplete</string>
-    <string name="action_hide_past">Hide Past Items</string>
-    <string name="no_items_message">Nothing \"To-Do\"</string>
+
+    <string name="action_delete">Delete</string>
     <string name="action_delete_all">Delete All</string>
+
     <string name="drawer_label_home">Home</string>
     <string name="drawer_label_all">All Items</string>
     <string name="drawer_label_high">High Priority Items</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
+
+    <string name="alert_positive">OK</string>
+    <string name="alert_negative">Cancel</string>
+    <string name="alert_delete_all_message">Are you sure?</string>
+    <string name="alert_delete_all_title">Delete All ToDo Items</string>
 </resources>
