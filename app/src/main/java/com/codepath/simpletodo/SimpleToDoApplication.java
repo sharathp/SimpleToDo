@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import com.codepath.simpletodo.di.ApplicationComponent;
 import com.codepath.simpletodo.di.DaggerApplicationComponent;
 import com.codepath.simpletodo.di.modules.ApplicationModule;
+import com.codepath.simpletodo.utils.AlarmUtils;
 
 public class SimpleToDoApplication extends Application {
     private ApplicationComponent component;
@@ -15,6 +16,11 @@ public class SimpleToDoApplication extends Application {
     public void onCreate() {
         super.onCreate();
         initDependencyInjection();
+        registerAlarms();
+    }
+
+    private void registerAlarms() {
+        AlarmUtils.scheduleToDoNotificationAlarm(this);
     }
 
     private void initDependencyInjection() {

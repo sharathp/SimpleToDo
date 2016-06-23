@@ -24,4 +24,5 @@
     <dimen name="text_size_no_items">20sp</dimen>
     <dimen name="text_size_label_item_complete">18sp</dimen>
     <dimen name="margin_task_list_item_priority">12sp</dimen>
+    <dimen name="text_size_nav_drawer_title">18sp</dimen>
 </resources>

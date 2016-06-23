@@ -1,13 +1,13 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
+    <style name="AppTheme" parent="BaseAppTheme">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <!--<item name="android:textColorSecondary">@color/textColor</item>-->
-        <!--<item name="colorControlActivated">?android:attr/textColorSecondary</item>-->
+    </style>
+
+    <style name="BaseAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- customize BaseAppTheme -->
     </style>
     
     <style name="ToDoFieldLabel" parent="TextAppearance.AppCompat.Medium">

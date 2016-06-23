@@ -66,13 +66,13 @@ public class PriorityPickerFragment extends DialogFragment {
         ButterKnife.bind(this, view);
 
         builder.setView(view)
-                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.alert_positive, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(final DialogInterface dialog, final int which) {
                         mOnPrioritySetListener.onPrioritySet(mPrioritySeekBar.getProgress());
                     }
                 })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.alert_negative, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // no-op

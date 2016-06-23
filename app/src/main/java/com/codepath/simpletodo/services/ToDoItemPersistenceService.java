@@ -10,35 +10,25 @@ import com.codepath.simpletodo.SimpleToDoApplication;
 import com.codepath.simpletodo.models.ToDoItem;
 import com.codepath.simpletodo.repos.ToDoItemDAO;
 
-import javax.inject.Inject;
-
+/**
+ * Intent Service that manages persistence of ToDo items.
+ */
 public class ToDoItemPersistenceService extends IntentService {
     private static final String TAG = ToDoItemPersistenceService.class.getSimpleName();
 
-    @Inject
-    ToDoItemDAO mToDoItemDAO;
+    private ToDoItemDAO mToDoItemDAO;
 
     public static final String EXTRA_TODO_ITEM = ToDoItemPersistenceService.class.getName() + ".ITEM";
     public static final String EXTRA_TODO_ITEM_ID = ToDoItemPersistenceService.class.getName() + ".ITEM_ID";
     public static final String EXTRA_TODO_ACTION = ToDoItemPersistenceService.class.getName() + ".ACTION";
 
-    /**
-     * Creates an IntentService.  Invoked by your subclass's constructor.
-     */
     public ToDoItemPersistenceService() {
         super(ToDoItemPersistenceService.class.getSimpleName());
     }
 
-    public static Intent createIntentToInsert(final Context context, final ToDoItem toDoItem) {
+    public static Intent createIntentToPersist(final Context context, final ToDoItem toDoItem) {
         final Intent intent = new Intent(context, ToDoItemPersistenceService.class);
-        intent.putExtra(EXTRA_TODO_ACTION, ACTION_INSERT);
-        intent.putExtra(EXTRA_TODO_ITEM, toDoItem);
-        return intent;
-    }
-
-    public static Intent createIntentToUpdate(final Context context, final ToDoItem toDoItem) {
-        final Intent intent = new Intent(context, ToDoItemPersistenceService.class);
-        intent.putExtra(EXTRA_TODO_ACTION, ACTION_UPDATE);
+        intent.putExtra(EXTRA_TODO_ACTION, ACTION_PERSIST);
         intent.putExtra(EXTRA_TODO_ITEM, toDoItem);
         return intent;
     }
@@ -59,7 +49,7 @@ public class ToDoItemPersistenceService extends IntentService {
     @Override
     public void onCreate() {
         super.onCreate();
-        SimpleToDoApplication.from(this).getComponent().inject(this);
+        mToDoItemDAO = SimpleToDoApplication.from(this).getComponent().getToDoItemDao();
     }
 
     @Override
@@ -67,12 +57,8 @@ public class ToDoItemPersistenceService extends IntentService {
         @Action final int action = intent.getIntExtra(EXTRA_TODO_ACTION, -1);
 
         switch (action) {
-            case ACTION_INSERT: {
-                insert(intent);
-                break;
-            }
-            case ACTION_UPDATE: {
-                update(intent);
+            case ACTION_PERSIST: {
+                persist(intent);
                 break;
             }
             case ACTION_DELETE: {
@@ -89,14 +75,9 @@ public class ToDoItemPersistenceService extends IntentService {
         }
     }
 
-    private void insert(final Intent intent) {
+    private void persist(final Intent intent) {
         final ToDoItem toDoItem = intent.getParcelableExtra(EXTRA_TODO_ITEM);
-        mToDoItemDAO.insert(toDoItem);
-    }
-
-    private void update(final Intent intent) {
-        final ToDoItem toDoItem = intent.getParcelableExtra(EXTRA_TODO_ITEM);
-        mToDoItemDAO.update(toDoItem);
+        mToDoItemDAO.persist(toDoItem);
     }
 
     private void delete(final Intent intent) {
@@ -108,12 +89,11 @@ public class ToDoItemPersistenceService extends IntentService {
         mToDoItemDAO.deleteAll();
     }
 
-    public static final int ACTION_INSERT = 0;
-    public static final int ACTION_UPDATE = 1;
+    public static final int ACTION_PERSIST = 1;
     public static final int ACTION_DELETE = 2;
     public static final int ACTION_DELETE_ALL = 3;
 
-    @IntDef({ACTION_INSERT, ACTION_UPDATE, ACTION_DELETE, ACTION_DELETE_ALL})
+    @IntDef({ACTION_PERSIST, ACTION_DELETE, ACTION_DELETE_ALL})
     public @interface Action {
         // no-op
     }

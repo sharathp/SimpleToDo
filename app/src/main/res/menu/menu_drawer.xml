@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_home"
+            android:title="@string/drawer_label_home" />
+        <item
+            android:id="@+id/nav_all"
+            android:icon="@drawable/ic_playlist_add_check"
+            android:title="@string/drawer_label_all" />
+        <item
+            android:id="@+id/nav_high"
+            android:icon="@drawable/ic_priority_high"
+            android:title="@string/drawer_label_high" />
+    </group>
+
+</menu>
