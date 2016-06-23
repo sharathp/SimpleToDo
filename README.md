@@ -5,7 +5,7 @@ This is an Android demo application for managing ToDo items. See the [instructio
 ## Version 3
 Time spent: Approximately 15-18 hours  (total including Initial Submission & Version 2)
 
-List displays the Todo items sorted in the following order: (By default past items are hidden and a overflow menu options are available to show/hide past items)
+List displays the Todo items (via 'All Items' in navigation drawer ) sorted in the following order:
 * Date Ascending
 * Priority Descending (High, Medium & Low)
 * Name Ascending
@@ -21,15 +21,17 @@ Completed user stories:
  * [x] Additional: Add support for selecting the priority of each todo item (and display in listview item)
  * [x] Additional: Tweak the style improving the UI / UX, play with colors, images or backgrounds 
  * [x] Additional: Provided Date & Priority pickers via DialogFragment (Instead of editing items via DialogFragment as a toolbar is not usual for DialogFragments)
- * [x] Additional: By default the list doesn't include the past items. Provided mechanism to toggle showing/hiding past items. Also provided a mechanism to delete all items
+ * [x] Additional: Navigation Drawer (Provides the ability to toggle between Todays Items, All Items & High Priority Items options)
+ * [x] Additional: Mechanism to delete all items
  * [x] Additional: Added description field to todo item
- * [x] Additional: Navigation Drawer
  * [x] Additional: Recurring notification at 4 AM everyday
 
 Walkthrough of all user stories:
 
+### All Features
 ![Video Walkthrough](simpletodo_demo_3.gif)
 
+### Notification Demo
 ![Notification Demo](simpletodo_demo_3_notif.gif)
 
 
