@@ -32,12 +32,7 @@ public class ToDoItemDAO {
      * @return current and future ToDoItems
      */
     public SquidSupportCursorLoader<ToDoItem> getCurrentToDoItems() {
-        final Query query = Query.select(ToDoItem.PROPERTIES)
-                .where(ToDoItem.DUE_DATE.gte(DateUtils.getToday().getTime()))
-                .orderBy(Order.asc(ToDoItem.DUE_DATE))
-                .orderBy(Order.desc(ToDoItem.PRIORITY))
-                .orderBy(Order.asc(ToDoItem.NAME));
-        return getToDoItems(query);
+        return getToDoItems(getTodayQuery());
     }
 
     // even though this seems unnecessary, this helps keep track of all clients
@@ -71,12 +66,14 @@ public class ToDoItemDAO {
     }
 
     public SquidCursor<ToDoItem> getAllToDoItemsForToday() {
-        final Query query = Query.select(ToDoItem.PROPERTIES)
+        return mDatabase.query(ToDoItem.class, getTodayQuery());
+    }
+
+    private Query getTodayQuery() {
+        return Query.select(ToDoItem.PROPERTIES)
                 .where(ToDoItem.DUE_DATE.eq(DateUtils.getToday().getTime()))
                 .orderBy(Order.desc(ToDoItem.PRIORITY))
                 .orderBy(Order.asc(ToDoItem.NAME));
-
-        return mDatabase.query(ToDoItem.class, query);
     }
 
     // even though this seems unnecessary, this helps keep track of all clients
