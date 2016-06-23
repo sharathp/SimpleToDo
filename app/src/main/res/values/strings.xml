@@ -27,4 +27,11 @@
     <string name="alert_negative">Cancel</string>
     <string name="alert_delete_all_message">Are you sure?</string>
     <string name="alert_delete_all_title">Delete All ToDo Items</string>
+
+    <string name="notif_title">SimpleToDo Reminder</string>
+    <string name="notif_big_content_title">Today\'s SimpleToDo items: %d</string>
+    <string name="notif_content_high">High Priority items: %d</string>
+    <string name="notif_content_medium">Medium Priority items: %d</string>
+    <string name="notif_content_low">Low Priority items: %d</string>
+
 </resources>
