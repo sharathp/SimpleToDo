@@ -18,13 +18,16 @@ Completed user stories:
  * [x] Suggested: Persist the todo items into SQLite instead of a text file
  * [x] Suggested: Improve style of the todo items in the list using a custom adapter
  * [x] Suggested: Add support for completion due dates for todo items (and display within listview item)
+ * [x] Additional: Added description field to todo item 
+ * [x] Additional: Used a Recycler view to display todo items 
  * [x] Additional: Add support for selecting the priority of each todo item (and display in listview item)
- * [x] Additional: Tweak the style improving the UI / UX, play with colors, images or backgrounds 
+ * [x] Additional: Tweak the style improving the UI / UX, play with colors, images or backgrounds.
+ * [x] Additional: Ability to mark an item as complete
  * [x] Additional: Provided Date & Priority pickers via DialogFragment (Instead of editing items via DialogFragment as a toolbar is not usual for DialogFragments)
+ * [x] Additional: Some material design aspects: Floating Action Button, Navigation Drawer
  * [x] Additional: Navigation Drawer (Provides the ability to toggle between Todays Items, All Items & High Priority Items options)
  * [x] Additional: Mechanism to delete all items
- * [x] Additional: Added description field to todo item
- * [x] Additional: Recurring notification at 4 AM everyday
+ * [x] Additional: Recurring notification at 4 AM everyday (via Intent Service and Broadcast Receivers)
 
 Walkthrough of all user stories:
 
