@@ -41,6 +41,10 @@ public class AllToDoListFragment extends BaseTodoListFragment {
                 showDeleteAllAlert();
                 return true;
             }
+            case R.id.action_delete_completed: {
+                deleteCompleted();
+                return true;
+            }
             default: {
                 return super.onOptionsItemSelected(item);
             }
@@ -78,6 +82,11 @@ public class AllToDoListFragment extends BaseTodoListFragment {
 
     private void deleteAll() {
         final Intent deleteAllIntent = ToDoItemPersistenceService.createIntentToDeleteAll(getActivity());
+        getActivity().startService(deleteAllIntent);
+    }
+
+    private void deleteCompleted() {
+        final Intent deleteAllIntent = ToDoItemPersistenceService.createIntentToDeleteCompleted(getActivity());
         getActivity().startService(deleteAllIntent);
     }
 }

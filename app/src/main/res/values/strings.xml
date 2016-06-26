@@ -16,10 +16,12 @@
 
     <string name="action_delete">Delete</string>
     <string name="action_delete_all">Delete All</string>
+    <string name="action_delete_completed">Delete Completed</string>
 
     <string name="drawer_label_home">Today Items</string>
     <string name="drawer_label_all">All Items</string>
     <string name="drawer_label_high">High Priority Items</string>
+    <string name="drawer_label_overdue">Overdue Items</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
 

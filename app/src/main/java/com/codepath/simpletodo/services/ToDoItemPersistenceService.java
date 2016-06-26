@@ -4,6 +4,7 @@ import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.IntDef;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 
 import com.codepath.simpletodo.SimpleToDoApplication;
@@ -46,6 +47,12 @@ public class ToDoItemPersistenceService extends IntentService {
         return intent;
     }
 
+    public static Intent createIntentToDeleteCompleted(final Context context) {
+        final Intent intent = new Intent(context, ToDoItemPersistenceService.class);
+        intent.putExtra(EXTRA_TODO_ACTION, ACTION_DELETE_COMPLETED);
+        return intent;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -69,6 +76,10 @@ public class ToDoItemPersistenceService extends IntentService {
                 deleteAll();
                 break;
             }
+            case ACTION_DELETE_COMPLETED: {
+                deleteCompleted();
+                break;
+            }
             default: {
                 Log.w(TAG, "Unknown action: " + action);
             }
@@ -89,11 +100,16 @@ public class ToDoItemPersistenceService extends IntentService {
         mToDoItemDAO.deleteAll();
     }
 
+    private void deleteCompleted() {
+        mToDoItemDAO.deleteCompleted();
+    }
+
     public static final int ACTION_PERSIST = 1;
     public static final int ACTION_DELETE = 2;
     public static final int ACTION_DELETE_ALL = 3;
+    public static final int ACTION_DELETE_COMPLETED = 4;
 
-    @IntDef({ACTION_PERSIST, ACTION_DELETE, ACTION_DELETE_ALL})
+    @IntDef({ACTION_PERSIST, ACTION_DELETE, ACTION_DELETE_ALL, ACTION_DELETE_COMPLETED})
     public @interface Action {
         // no-op
     }
