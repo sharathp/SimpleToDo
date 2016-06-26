@@ -17,6 +17,7 @@
     <string name="action_delete">Delete</string>
     <string name="action_delete_all">Delete All</string>
     <string name="action_delete_completed">Delete Completed</string>
+    <string name="action_search">Search</string>
 
     <string name="drawer_label_home">Today Items</string>
     <string name="drawer_label_all">All Items</string>

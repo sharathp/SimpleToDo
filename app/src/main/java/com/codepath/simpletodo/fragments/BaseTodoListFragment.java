@@ -73,7 +73,7 @@ public abstract class BaseTodoListFragment extends Fragment  implements ToDoItem
     @Override
     public void onActivityCreated(@Nullable final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        getLoaderManager().initLoader(LOADER_ID_TODO_ITEMS, null, this);
+        loadDefaultToDoItems();
     }
 
     @Override
@@ -105,7 +105,7 @@ public abstract class BaseTodoListFragment extends Fragment  implements ToDoItem
         mNoItemsTextView.setVisibility(View.INVISIBLE);
         mItemsRecyclerView.setVisibility(View.INVISIBLE);
 
-        return doCreateToDoItemsLoader();
+        return doCreateToDoItemsLoader(id, args);
     }
 
     @Override
@@ -151,7 +151,7 @@ public abstract class BaseTodoListFragment extends Fragment  implements ToDoItem
         }
     }
 
-    protected abstract Loader<SquidCursor<ToDoItem>> doCreateToDoItemsLoader();
+    protected abstract Loader<SquidCursor<ToDoItem>> doCreateToDoItemsLoader(final int id, final Bundle args);
 
     // not supported by default
     protected boolean isItemCreationSupported() {
@@ -161,5 +161,13 @@ public abstract class BaseTodoListFragment extends Fragment  implements ToDoItem
     private void createNewItem() {
         final Intent intent = EditItemActivity.createIntent(getActivity(), null);
         startActivityForResult(intent, REQUEST_CODE_EDIT_ACTIVITY);
+    }
+
+    protected void loadDefaultToDoItems() {
+        getLoaderManager().restartLoader(LOADER_ID_TODO_ITEMS, null, this);
+    }
+
+    protected void destroyDefaultToDoItems() {
+        getLoaderManager().destroyLoader(LOADER_ID_TODO_ITEMS);
     }
 }

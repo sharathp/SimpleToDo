@@ -248,9 +248,7 @@ public class EditItemActivity extends AppCompatActivity implements DatePickerDia
         mToDoItem.setName(updatedName.trim());
 
         final String updatedDescription = mItemDescEditText.getText().toString();
-        if (! TextUtils.isEmpty(updatedDescription)) {
-            mToDoItem.setDescription(updatedDescription);
-        }
+        mToDoItem.setDescription(updatedDescription);
 
         mToDoItem.setIsCompleted(mCompletedCheckbox.isChecked());
 

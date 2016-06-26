@@ -1,5 +1,6 @@
 package com.codepath.simpletodo.fragments;
 
+import android.os.Bundle;
 import android.support.v4.content.Loader;
 
 import com.codepath.simpletodo.models.ToDoItem;
@@ -15,7 +16,7 @@ public class OverdueToDoListFragment extends BaseTodoListFragment {
     }
 
     @Override
-    protected Loader<SquidCursor<ToDoItem>> doCreateToDoItemsLoader() {
+    protected Loader<SquidCursor<ToDoItem>> doCreateToDoItemsLoader(final int id, final Bundle args) {
         return mToDoItemDAO.getOverdueToDoItems();
     }
 }
