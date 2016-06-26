@@ -37,6 +37,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class EditItemActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, PriorityPickerFragment.OnPrioritySetListener {
+    private static final String TAG_DATE_PICKER = "datePicker";
+    private static final String TAG_PRIORITY_PICKER = "priorityPicker";
+
     public static final String EXTRA_ITEM = "EditItemActivity.ITEM";
     private static final String PATTERN_DATE = "dd-MMM-yyyy";
 
@@ -110,9 +113,10 @@ public class EditItemActivity extends AppCompatActivity implements DatePickerDia
     public boolean onCreateOptionsMenu(final Menu menu) {
         getMenuInflater().inflate(R.menu.menu_edit, menu);
 
-        // not a new item, so, hide delete
+        // not a new item, so, hide delete and share
         if (! mToDoItem.isSaved()) {
             menu.findItem(R.id.action_delete).setVisible(false);
+            menu.findItem(R.id.action_share).setVisible(false);
         }
 
         return true;
@@ -127,6 +131,10 @@ public class EditItemActivity extends AppCompatActivity implements DatePickerDia
             }
             case R.id.action_delete: {
                 deleteItem();
+                return true;
+            }
+            case R.id.action_share: {
+                shareItem();
                 return true;
             }
             default:
@@ -230,18 +238,18 @@ public class EditItemActivity extends AppCompatActivity implements DatePickerDia
 
     private void showCalendar() {
         final DatePickerFragment datePickerFragment = DatePickerFragment.createInstance(mToDoItem.getDueDate());
-        datePickerFragment.show(getSupportFragmentManager(), "datePicker");
+        datePickerFragment.show(getSupportFragmentManager(), TAG_DATE_PICKER);
     }
 
     private void showPriorityPicker() {
         final PriorityPickerFragment priorityPickerFragment = PriorityPickerFragment.createInstance(mToDoItem.getPriority());
-        priorityPickerFragment.show(getSupportFragmentManager(), "priorityPicker");
+        priorityPickerFragment.show(getSupportFragmentManager(), TAG_PRIORITY_PICKER);
     }
 
     private void onSaveItem() {
         final String updatedName = mItemNameEditText.getText().toString();
         if (TextUtils.isEmpty(updatedName)) {
-            mItemNameTextInputLayout.setError("Name is required");
+            mItemNameTextInputLayout.setError(getString(R.string.error_item_name));
             return;
         }
 
@@ -280,5 +288,35 @@ public class EditItemActivity extends AppCompatActivity implements DatePickerDia
         final Intent deleteIntent = ToDoItemPersistenceService.createIntentToDelete(this, mToDoItem.getId());
         startService(deleteIntent);
         this.finish();
+    }
+
+    private void shareItem() {
+        final Intent shareIntent = getShareIntent();
+        startActivity(Intent.createChooser(shareIntent, getString(R.string.share_intent_title)));
+    }
+
+    private Intent getShareIntent() {
+        final Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, mToDoItem.getName());
+        shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, getShareContent());
+        return shareIntent;
+    }
+
+    private CharSequence getShareContent() {
+        final String lineSeparator = System.getProperty("line.separator");
+
+        final StringBuilder sb = new StringBuilder();
+        sb.append(getString(R.string.share_title, mToDoItem.getName()));
+        sb.append(lineSeparator);
+        sb.append(getString(R.string.share_due_date, formatDate(new Date(mToDoItem.getDueDate()))));
+        sb.append(lineSeparator);
+        sb.append(getString(R.string.share_priority, Priority.getPriorityByOrder(mToDoItem.getPriority())));
+        if (! TextUtils.isEmpty(mToDoItem.getDescription())) {
+            sb.append(lineSeparator);
+            sb.append(getString(R.string.share_description, mToDoItem.getDescription()));
+        }
+
+        return sb.toString();
     }
 }
