@@ -29,13 +29,16 @@ Completed user stories:
  * [x] Additional: Mechanism to delete completed items
  * [x] Additional: Mechanism to delete all items
  * [x] Additional: Recurring notification at 4 AM everyday (via Intent Service and Broadcast Receivers)
- * [x] Additional: Ability to search within all ToDoItems (leveraging android provided SearchView)
+ * [x] Additional: Ability to search within all ToDoItems (leveraging android provided SearchView, searches in name and description fields, case insensitive and does "contains" search via SQL LIKE and wildcards)
  * [x] Additional: Ability to share a ToDoItem as plain text (via "ACTION_SEND" Intent)
 
 Walkthrough of all user stories:
 
 ### All Features
 ![Video Walkthrough](simpletodo_demo_4.gif)
+
+### Date & Priority Picker
+![Video Walkthrough](simpletodo_demo_4_picker.gif)
 
 ### Notification Demo
 ![Notification Demo](simpletodo_demo_4_notif.gif)
