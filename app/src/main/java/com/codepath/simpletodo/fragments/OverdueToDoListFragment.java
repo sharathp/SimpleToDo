@@ -7,16 +7,16 @@ import com.codepath.simpletodo.models.ToDoItem;
 import com.yahoo.squidb.data.SquidCursor;
 
 /**
- * Fragment that shows High Priority ToDo items.
+ * Fragment that shows Overdue ToDo items.
  */
-public class HighPriorityToDoListFragment extends BaseTodoListFragment {
+public class OverdueToDoListFragment extends BaseTodoListFragment {
 
-    public static HighPriorityToDoListFragment createInstance() {
-        return new HighPriorityToDoListFragment();
+    public static OverdueToDoListFragment createInstance() {
+        return new OverdueToDoListFragment();
     }
 
     @Override
     protected Loader<SquidCursor<ToDoItem>> doCreateToDoItemsLoader(final int id, final Bundle args) {
-        return mToDoItemDAO.getHighPriorityToDoItems();
+        return mToDoItemDAO.getOverdueToDoItems();
     }
 }

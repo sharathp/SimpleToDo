@@ -18,6 +18,7 @@ import com.codepath.simpletodo.R;
 import com.codepath.simpletodo.fragments.AllToDoListFragment;
 import com.codepath.simpletodo.fragments.HighPriorityToDoListFragment;
 import com.codepath.simpletodo.fragments.HomeToDoListFragment;
+import com.codepath.simpletodo.fragments.OverdueToDoListFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -103,15 +104,22 @@ public class MainActivity extends AppCompatActivity {
     public void selectDrawerItem(final MenuItem menuItem) {
         Fragment fragment;
         switch(menuItem.getItemId()) {
-            case R.id.nav_home:
+            case R.id.nav_home: {
                 fragment = HomeToDoListFragment.createInstance();
                 break;
-            case R.id.nav_all:
+            }
+            case R.id.nav_all: {
                 fragment = AllToDoListFragment.createInstance();
                 break;
-            case R.id.nav_high:
+            }
+            case R.id.nav_high: {
                 fragment = HighPriorityToDoListFragment.createInstance();
                 break;
+            }
+            case R.id.nav_overdue: {
+                fragment = OverdueToDoListFragment.createInstance();
+                break;
+            }
             default:
                 Log.w(TAG, "Unknown menu item: " + menuItem.getTitle());
                 fragment = HomeToDoListFragment.createInstance();

@@ -14,12 +14,18 @@
     <string name="label_item_complete">Completed</string>
     <string name="label_item_create">New Item</string>
 
+    <string name="error_item_name">Name is required</string>
+
     <string name="action_delete">Delete</string>
     <string name="action_delete_all">Delete All</string>
+    <string name="action_delete_completed">Delete Completed</string>
+    <string name="action_search">Search</string>
+    <string name="action_share">Share</string>
 
     <string name="drawer_label_home">Today Items</string>
     <string name="drawer_label_all">All Items</string>
     <string name="drawer_label_high">High Priority Items</string>
+    <string name="drawer_label_overdue">Overdue Items</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
 
@@ -33,5 +39,11 @@
     <string name="notif_content_high">High Priority items: %d</string>
     <string name="notif_content_medium">Medium Priority items: %d</string>
     <string name="notif_content_low">Low Priority items: %d</string>
+
+    <string name="share_intent_title">Share using</string>
+    <string name="share_title">To Do: %s</string>
+    <string name="share_due_date">Due Date: %s</string>
+    <string name="share_priority">Priority: %s</string>
+    <string name="share_description">Notes: %s</string>
 
 </resources>
