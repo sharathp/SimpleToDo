@@ -40,6 +40,12 @@ Walkthrough of all user stories:
 ### Date & Priority Picker
 ![Video Walkthrough](simpletodo_demo_4_picker.gif)
 
+### Search
+![Video Walkthrough](simpletodo_demo_4_search.gif)
+
+### Share (Please note only Messaging app matches "ACTION_SEND" text/plain on the emulator)
+![Video Walkthrough](simpletodo_demo_4_share.gif)
+
 ### Notification Demo
 ![Notification Demo](simpletodo_demo_4_notif.gif)
 
