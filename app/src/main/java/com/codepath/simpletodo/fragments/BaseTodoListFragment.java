@@ -10,6 +10,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 import com.codepath.simpletodo.R;
 import com.codepath.simpletodo.SimpleToDoApplication;
 import com.codepath.simpletodo.activities.EditItemActivity;
+import com.codepath.simpletodo.adapters.SimpleItemTouchHelperCallback;
 import com.codepath.simpletodo.adapters.ToDoItemAdapter;
 import com.codepath.simpletodo.models.ToDoItem;
 import com.codepath.simpletodo.repos.ToDoItemDAO;
@@ -148,6 +150,10 @@ public abstract class BaseTodoListFragment extends Fragment  implements ToDoItem
         mItemsRecyclerView.setAdapter(mToDoItemAdapter);
         mItemsRecyclerView.setHasFixedSize(true);
         mItemsRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
+        final ItemTouchHelper.Callback callback =
+                new SimpleItemTouchHelperCallback(mToDoItemAdapter);
+        final ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
+        touchHelper.attachToRecyclerView(mItemsRecyclerView);
 
         if (isItemCreationSupported()) {
             mFabNewItem.setVisibility(View.VISIBLE);
