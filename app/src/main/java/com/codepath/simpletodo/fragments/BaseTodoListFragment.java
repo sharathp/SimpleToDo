@@ -1,5 +1,6 @@
 package com.codepath.simpletodo.fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -52,6 +53,17 @@ public abstract class BaseTodoListFragment extends Fragment  implements ToDoItem
     TextView mNoItemsTextView;
 
     private ToDoItemAdapter mToDoItemAdapter;
+    private ToDoActionListener mToDoActionListener;
+
+    @Override
+    public void onAttach(final Context context) {
+        super.onAttach(context);
+        if (! (context instanceof ToDoActionListener)) {
+            throw new RuntimeException("activity should implement: " + ToDoActionListener.class.getName());
+        }
+
+        mToDoActionListener = (ToDoActionListener) context;
+    }
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
@@ -94,8 +106,7 @@ public abstract class BaseTodoListFragment extends Fragment  implements ToDoItem
 
     @Override
     public void onClick(final ToDoItem toDoItem) {
-        final Intent intent = EditItemActivity.createIntent(getActivity(), toDoItem);
-        startActivityForResult(intent, REQUEST_CODE_EDIT_ACTIVITY);
+        mToDoActionListener.onEditToDo(toDoItem);
     }
 
     @Override
@@ -143,7 +154,7 @@ public abstract class BaseTodoListFragment extends Fragment  implements ToDoItem
             mFabNewItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(final View v) {
-                    createNewItem();
+                    mToDoActionListener.onAddNewToDo();
                 }
             });
         } else {
@@ -158,16 +169,18 @@ public abstract class BaseTodoListFragment extends Fragment  implements ToDoItem
         return false;
     }
 
-    private void createNewItem() {
-        final Intent intent = EditItemActivity.createIntent(getActivity(), null);
-        startActivityForResult(intent, REQUEST_CODE_EDIT_ACTIVITY);
-    }
-
     protected void loadDefaultToDoItems() {
         getLoaderManager().restartLoader(LOADER_ID_TODO_ITEMS, null, this);
     }
 
     protected void destroyDefaultToDoItems() {
         getLoaderManager().destroyLoader(LOADER_ID_TODO_ITEMS);
+    }
+
+    public interface ToDoActionListener {
+
+        void onAddNewToDo();
+
+        void onEditToDo(ToDoItem toDoItem);
     }
 }
