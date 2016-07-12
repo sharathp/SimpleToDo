@@ -1,5 +1,6 @@
 package com.codepath.simpletodo.fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,6 +10,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +21,7 @@ import android.widget.Toast;
 import com.codepath.simpletodo.R;
 import com.codepath.simpletodo.SimpleToDoApplication;
 import com.codepath.simpletodo.activities.EditItemActivity;
+import com.codepath.simpletodo.adapters.SimpleItemTouchHelperCallback;
 import com.codepath.simpletodo.adapters.ToDoItemAdapter;
 import com.codepath.simpletodo.models.ToDoItem;
 import com.codepath.simpletodo.repos.ToDoItemDAO;
@@ -52,6 +55,17 @@ public abstract class BaseTodoListFragment extends Fragment  implements ToDoItem
     TextView mNoItemsTextView;
 
     private ToDoItemAdapter mToDoItemAdapter;
+    private ToDoActionListener mToDoActionListener;
+
+    @Override
+    public void onAttach(final Context context) {
+        super.onAttach(context);
+        if (! (context instanceof ToDoActionListener)) {
+            throw new RuntimeException("activity should implement: " + ToDoActionListener.class.getName());
+        }
+
+        mToDoActionListener = (ToDoActionListener) context;
+    }
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
@@ -94,8 +108,7 @@ public abstract class BaseTodoListFragment extends Fragment  implements ToDoItem
 
     @Override
     public void onClick(final ToDoItem toDoItem) {
-        final Intent intent = EditItemActivity.createIntent(getActivity(), toDoItem);
-        startActivityForResult(intent, REQUEST_CODE_EDIT_ACTIVITY);
+        mToDoActionListener.onEditToDo(toDoItem);
     }
 
     @Override
@@ -137,13 +150,17 @@ public abstract class BaseTodoListFragment extends Fragment  implements ToDoItem
         mItemsRecyclerView.setAdapter(mToDoItemAdapter);
         mItemsRecyclerView.setHasFixedSize(true);
         mItemsRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
+        final ItemTouchHelper.Callback callback =
+                new SimpleItemTouchHelperCallback(mToDoItemAdapter);
+        final ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
+        touchHelper.attachToRecyclerView(mItemsRecyclerView);
 
         if (isItemCreationSupported()) {
             mFabNewItem.setVisibility(View.VISIBLE);
             mFabNewItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(final View v) {
-                    createNewItem();
+                    mToDoActionListener.onAddNewToDo();
                 }
             });
         } else {
@@ -158,16 +175,18 @@ public abstract class BaseTodoListFragment extends Fragment  implements ToDoItem
         return false;
     }
 
-    private void createNewItem() {
-        final Intent intent = EditItemActivity.createIntent(getActivity(), null);
-        startActivityForResult(intent, REQUEST_CODE_EDIT_ACTIVITY);
-    }
-
     protected void loadDefaultToDoItems() {
         getLoaderManager().restartLoader(LOADER_ID_TODO_ITEMS, null, this);
     }
 
     protected void destroyDefaultToDoItems() {
         getLoaderManager().destroyLoader(LOADER_ID_TODO_ITEMS);
+    }
+
+    public interface ToDoActionListener {
+
+        void onAddNewToDo();
+
+        void onEditToDo(ToDoItem toDoItem);
     }
 }

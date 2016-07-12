@@ -42,6 +42,7 @@
         android:layout_margin="@dimen/margin_medium"
         app:elevation="@dimen/floating_button_elevation"
         app:borderWidth="0dp"
+        app:layout_behavior="com.codepath.simpletodo.views.behaviors.ScrollAwareFABBehavior"
         android:text="@string/label_item_create"
         android:contentDescription="@string/label_item_create"
         android:src="@drawable/ic_add"/>
