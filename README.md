@@ -2,6 +2,19 @@
 
 This is an Android demo application for managing ToDo items. See the [instructions](http://courses.codepath.com/snippets/intro_to_android/prework) for reference.
 
+## Version 5
+Time spent: Approximately 22 hours (total including Initial Submission, Version 2, 3 & 4)
+
+Completed user stories:
+
+* [x] All features in Version 4
+* [x] Additional: Swipe to Delete ToDo list item
+* [x] Additional: FAB appear/disappear on scrolling list items
+* [x] Additional: "Explode" transition on navigating from list to a ToDo detail screen
+
+### New features demo
+![Video Walkthrough](simpletodo_demo_5.gif)
+
 ## Version 4
 Time spent: Approximately 20 hours (total including Initial Submission, Version 2 & 3)
 
