@@ -13,7 +13,7 @@ Completed user stories:
 * [x] Additional: "Explode" transition on navigating from list to a ToDo detail screen
 
 ### New features demo
-![Video Walkthrough](simpletodo_demo_5.gif)
+![Video Walkthrough](demos/simpletodo_demo_5.gif)
 
 ## Version 4
 Time spent: Approximately 20 hours (total including Initial Submission, Version 2 & 3)
@@ -48,19 +48,19 @@ Completed user stories:
 Walkthrough of all user stories:
 
 ### All Features
-![Video Walkthrough](simpletodo_demo_4.gif)
+![Video Walkthrough](demos/simpletodo_demo_4.gif)
 
 ### Date & Priority Picker
-![Video Walkthrough](simpletodo_demo_4_picker.gif)
+![Video Walkthrough](demos/simpletodo_demo_4_picker.gif)
 
 ### Search
-![Video Walkthrough](simpletodo_demo_4_search.gif)
+![Video Walkthrough](demos/simpletodo_demo_4_search.gif)
 
 ### Share (Please note only Messaging app matches "ACTION_SEND" text/plain on the emulator)
-![Video Walkthrough](simpletodo_demo_4_share.gif)
+![Video Walkthrough](demos/simpletodo_demo_4_share.gif)
 
 ### Notification Demo
-![Notification Demo](simpletodo_demo_4_notif.gif)
+![Notification Demo](demos/simpletodo_demo_4_notif.gif)
 
 ## Version 3
 Time spent: Approximately 15-18 hours  (total including Initial Submission & Version 2)
@@ -92,10 +92,10 @@ Completed user stories:
 Walkthrough of all user stories:
 
 ### All Features
-![Video Walkthrough](simpletodo_demo_3.gif)
+![Video Walkthrough](demos/simpletodo_demo_3.gif)
 
 ### Notification Demo
-![Notification Demo](simpletodo_demo_3_notif.gif)
+![Notification Demo](demos/simpletodo_demo_3_notif.gif)
 
 
 ## Version 2
@@ -122,7 +122,7 @@ Completed user stories:
 
 Walkthrough of all user stories:
 
-![Video Walkthrough](simpletodo_demo_2.gif)
+![Video Walkthrough](demos/simpletodo_demo_2.gif)
 
 ## Initial Submission
 Time spent: 2 hours spent in total
@@ -135,6 +135,6 @@ Completed user stories:
  
 Walkthrough of all user stories:
 
-![Video Walkthrough](simpletodo_demo_1.gif)
+![Video Walkthrough](demos/simpletodo_demo_1.gif)
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
